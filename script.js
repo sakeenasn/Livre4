@@ -92,22 +92,53 @@ function stopMagic(){
 
 
 // ================== FEU ==================
+// Variables globales pour le feu avancé
 let flameElements = [];
-let smokeElement;
-let ashInterval;
+let smokeElement = null;
+let ashInterval = null;
+let sparkInterval = null;
 
-// 🔥 Démarrer feu avancé
+// Étincelles
+function createSpark(){
+    if(!fireActive) return;
+    const spark = document.createElement("div");
+    spark.className = "spark";
+    const r = fireContainer.getBoundingClientRect();
+    spark.style.left = 30 + "px";
+    spark.style.top  = 60 + "px";
+    const tx = (Math.random()-0.5)*40 + "px";
+    const ty = -(Math.random()*60 + 20) + "px";
+    spark.style.setProperty("--sx", tx);
+    spark.style.setProperty("--sy", ty);
+    fireContainer.appendChild(spark);
+    setTimeout(()=>spark.remove(),600);
+}
+
+function startSparks(){
+    if(sparkInterval) clearInterval(sparkInterval);
+    sparkInterval = setInterval(createSpark, 80);
+}
+
+function stopSparks(){
+    clearInterval(sparkInterval);
+    sparkInterval = null;
+}
+
+// Démarrer feu avancé
 function startFire(){
+    if(fireActive) return; // sécurité
+
     fireActive = true;
     if(!isOpen) toggleBook();
 
+    // Position du conteneur feu
     const r = bookContainer.getBoundingClientRect();
     fireContainer.style.left = r.left + r.width/2 - 40 + "px";
     fireContainer.style.top  = r.top + r.height - 120 + "px";
     fireContainer.classList.add("active");
     stopMagic();
 
-    // Création flammes
+    // Flammes
     ["red","orange","yellow"].forEach(color=>{
         const f = document.createElement("div");
         f.className = "flame-adv " + color;
@@ -115,25 +146,27 @@ function startFire(){
         flameElements.push(f);
     });
 
-    // Création fumée
-    smokeElement = document.createElement("div");
-    smokeElement.className = "smoke";
-    fireContainer.appendChild(smokeElement);
+    // Fumée
+    if(!smokeElement){
+        smokeElement = document.createElement("div");
+        smokeElement.className = "smoke";
+        fireContainer.appendChild(smokeElement);
+    }
 
     // Étincelles
     startSparks();
 
-    // Cendres tombantes
+    // Cendres
     ashInterval = setInterval(()=>{
         const ash = document.createElement("div");
         ash.className = "ash";
-        ash.style.left = 30 + Math.random()*20 + "px"; // position dans le feu
+        ash.style.left = 30 + Math.random()*20 + "px";
         fireContainer.appendChild(ash);
         setTimeout(()=>ash.remove(),3000);
     },100);
 }
 
-// 🔥 Arrêter feu avancé
+// Arrêter feu avancé
 function stopFire(){
     fireActive = false;
     fireContainer.classList.remove("active");
@@ -143,49 +176,20 @@ function stopFire(){
     flameElements = [];
 
     // Supprimer fumée
-    if(smokeElement) smokeElement.remove();
-    smokeElement = null;
+    if(smokeElement){
+        smokeElement.remove();
+        smokeElement = null;
+    }
 
+    // Étincelles
     stopSparks();
+
+    // Cendres
     clearInterval(ashInterval);
+    ashInterval = null;
 }
 
-// ================== PAGES VOLANTES ==================
-function flyPages(){
-    document.querySelectorAll(".page").forEach((page,i)=>{
-        setTimeout(()=>{
-            const p = page.cloneNode(true);
-            const r = page.getBoundingClientRect();
-
-            p.style.cssText = `
-               position:absolute;
-               left:${r.left}px; top:${r.top}px;
-               width:${r.width}px; height:${r.height}px;
-               z-index:2000;
-               transform:rotateX(0deg);
-               pointer-events:none;
-               transition:4s;
-            `;
-
-            document.body.appendChild(p);
-
-            setTimeout(()=>{
-                p.style.transform = `
-                    translate(${(Math.random()-0.5)*800}px,
-                              ${(Math.random()-0.5)*600}px)
-                    rotateX(${Math.random()*360}deg)
-                    rotateY(${Math.random()*360}deg)`;
-                p.style.opacity = 0;
-            },30);
-
-            setTimeout(()=>p.remove(),4500);
-        },i*150);
-    });
+// Toggle feu (bouton)
+function toggleFire(){
+    fireActive ? stopFire() : startFire();
 }
-
-
-// ================== EVENEMENTS ==================
-bookContainer.addEventListener("click", toggleBook);
-btnTheme.addEventListener("click", toggleTheme);
-btnFly.addEventListener("click", flyPages);
-btnFire.addEventListener("click", toggleFire);

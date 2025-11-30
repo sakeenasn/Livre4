@@ -1,105 +1,155 @@
+// ================== SELECTEURS ==================
 const bookContainer = document.getElementById('bookContainer');
 const fireContainer = document.getElementById('fireContainer');
 const body = document.body;
 
+const btnTheme = document.getElementById("themeBtn");
+const btnFly   = document.getElementById("flyBtn");
+const btnFire  = document.getElementById("fireBtn");
+
+// ================== VARIABLES ==================
 let isOpen = false;
+let fireActive = false;
 let particleInterval;
 let magicTimeout;
-let fireActive = false;
+
 const colors = ['#ffd700','#ff9a9e','#a18cd1','#ffffff','#84fab0'];
 
-function playSound(audioId){ const audio=document.getElementById(audioId); if(audio){ audio.currentTime=0; audio.play().catch(e=>console.log(e)); } }
-function toggleTheme(){ body.classList.toggle('dark-mode'); body.style.transition='background 1.5s ease,color 1.5s ease'; setTimeout(()=>{body.style.transition='';},1600); }
 
+// ================== SONS ==================
+function playSound(id){
+    let sound = document.getElementById(id);
+    if(sound){
+        sound.currentTime = 0;
+        sound.play().catch(()=>{});
+    }
+}
+
+
+// ================== THEME ==================
+function toggleTheme(){
+    body.classList.toggle("dark-mode");
+    body.style.transition = "1.5s";
+}
+
+
+// ================== OUVERTURE LIVRE ==================
 function toggleBook(){
-    if(fireActive && isOpen) return;
-    isOpen=!isOpen;
+    if(fireActive && isOpen) return; // Sécurité
+
+    isOpen = !isOpen;
+
     if(isOpen){
-        bookContainer.classList.add('open');
-        const pageTurnDelay=200;
-        setTimeout(()=>playSound('soundPage'),300);
-        setTimeout(()=>playSound('soundPage'),300+pageTurnDelay);
-        setTimeout(()=>playSound('soundPage'),300+2*pageTurnDelay);
-        magicTimeout=setTimeout(startMagic,500);
-    }else{
-        bookContainer.classList.remove('open');
-        clearTimeout(magicTimeout);
+        bookContainer.classList.add("open");
+        playSound("soundPage");
+
+        magicTimeout = setTimeout(startMagic, 400);
+    } else {
+        bookContainer.classList.remove("open");
         stopMagic();
+
         if(fireActive) stopFire();
     }
 }
 
+
+// ================== EFFET PARTICULES ==================
+function createParticle(){
+    if(!isOpen) return;
+
+    const p = document.createElement("div");
+    p.className = "particle";
+
+    const size = Math.random()*10+5;
+    p.style.width = p.style.height = size+"px";
+
+    const color = body.classList.contains("dark-mode")
+        ? "#ffffff" : colors[Math.floor(Math.random()*colors.length)];
+
+    p.style.background = color;
+    p.style.boxShadow = `0 0 ${size*3}px ${color}`;
+
+    const r = bookContainer.getBoundingClientRect();
+    p.style.left = `${r.left+r.width/2}px`;
+    p.style.top  = `${r.top+r.height/2}px`;
+
+    p.style.setProperty("--tx", `${(Math.random()-0.5)*120}px`);
+    p.style.setProperty("--tx-end", `${(Math.random()-0.5)*700}px`);
+
+    p.style.animation = `floatUp ${2+Math.random()*2}s ease-out forwards`;
+
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),3000);
+}
+
+function startMagic(){
+    stopMagic();
+    particleInterval = setInterval(createParticle,25);
+}
+function stopMagic(){
+    clearInterval(particleInterval);
+}
+
+
+// ================== FEU ==================
+function startFire(){
+    fireActive = true;
+    if(!isOpen) toggleBook(); // Le livre doit être ouvert
+
+    const r = bookContainer.getBoundingClientRect();
+    fireContainer.style.left = r.left+r.width/2-30+"px";
+    fireContainer.style.top  = r.top+r.height-60+"px";
+
+    fireContainer.classList.add("active");
+    stopMagic();
+}
+
+function stopFire(){
+    fireActive = false;
+    fireContainer.classList.remove("active");
+}
+
+function toggleFire(){
+    fireActive ? stopFire() : startFire();
+}
+
+
+// ================== PAGES VOLANTES ==================
 function flyPages(){
-    const pages=document.querySelectorAll('.page:not(.front-cover):not(.back-cover)');
-    pages.forEach((page,i)=>{
+    document.querySelectorAll(".page").forEach((page,i)=>{
         setTimeout(()=>{
-            const flyingPage=page.cloneNode(true);
-            const rect=page.getBoundingClientRect();
-            flyingPage.style.position='absolute';
-            flyingPage.style.left=`${rect.left}px`;
-            flyingPage.style.top=`${rect.top}px`;
-            flyingPage.style.width=`${rect.width}px`;
-            flyingPage.style.height=`${rect.height}px`;
-            flyingPage.style.zIndex=1000;
-            flyingPage.style.pointerEvents='none';
-            flyingPage.style.transition='transform 4s ease-out, opacity 4s ease-out';
-            document.body.appendChild(flyingPage);
+            const p = page.cloneNode(true);
+            const r = page.getBoundingClientRect();
 
-            const endX=(Math.random()-0.5)*window.innerWidth*2;
-            const endY=(Math.random()-0.5)*window.innerHeight*2;
-            const rotateX=(Math.random()-0.5)*1080;
-            const rotateY=(Math.random()-0.5)*1080;
+            p.style.cssText = `
+               position:absolute;
+               left:${r.left}px; top:${r.top}px;
+               width:${r.width}px; height:${r.height}px;
+               z-index:2000;
+               transform:rotateX(0deg);
+               pointer-events:none;
+               transition:4s;
+            `;
 
-            requestAnimationFrame(()=>{
-                flyingPage.style.transform=`translate(${endX}px,${endY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                flyingPage.style.opacity=0;
-            });
+            document.body.appendChild(p);
 
-            setTimeout(()=>flyingPage.remove(),4000);
-        },i*100);
+            setTimeout(()=>{
+                p.style.transform = `
+                    translate(${(Math.random()-0.5)*800}px,
+                              ${(Math.random()-0.5)*600}px)
+                    rotateX(${Math.random()*360}deg)
+                    rotateY(${Math.random()*360}deg)`;
+                p.style.opacity = 0;
+            },30);
+
+            setTimeout(()=>p.remove(),4500);
+        },i*150);
     });
 }
 
-function createParticle(){ if(!isOpen) return;
-    const particle=document.createElement('div');
-    particle.classList.add('particle');
-    const size=Math.random()*12+4;
-    particle.style.width=`${size}px`;
-    particle.style.height=`${size}px`;
-    let currentColors=body.classList.contains('dark-mode')?['#ffffff','#cfcfcf','#a0a0ff','#ffd700','#e0e0ff']:colors;
-    const color=currentColors[Math.floor(Math.random()*currentColors.length)];
-    particle.style.background=color;
-    particle.style.boxShadow=`0 0 ${size*3}px ${color}`;
-    const rect=bookContainer.getBoundingClientRect();
-    const startX=rect.left+rect.width/2;
-    const startY=rect.top+rect.height/2;
-    particle.style.left=`${startX}px`;
-    particle.style.top=`${startY}px`;
-    const tx=(Math.random()-0.5)*120;
-    const txEnd=(Math.random()-0.5)*700;
-    particle.style.setProperty('--tx',`${tx}px`);
-    particle.style.setProperty('--tx-end',`${txEnd}px`);
-    const duration=Math.random()*2+2;
-    particle.style.animation=`floatUp ${duration}s ease-out forwards`;
-    document.body.appendChild(particle);
-    setTimeout(()=>particle.remove(),duration*1000);
-}
-function startMagic(){ stopMagic(); for(let i=0;i<50;i++) setTimeout(createParticle,i*25); particleInterval=setInterval(createParticle,25);}
-function stopMagic(){ if(particleInterval) clearInterval(particleInterval); particleInterval=null; }
 
-// 🔥 Fogo
-function startFire(){
-    if(fireActive) return;
-    fireActive=true;
-    if(!isOpen){ toggleBook(); }
-    const rect=bookContainer.getBoundingClientRect();
-    fireContainer.style.left = rect.left + rect.width/2 - 30 + 'px';
-    fireContainer.style.top = rect.top + rect.height - 60 + 'px';
-    fireContainer.classList.add('active');
-    stopMagic();
-}
-function stopFire(){
-    fireActive=false;
-    fireContainer.classList.remove('active');
-}
-function toggleFire(){ if(fireActive) stopFire(); else startFire(); }
+// ================== EVENEMENTS ==================
+bookContainer.addEventListener("click", toggleBook);
+btnTheme.addEventListener("click", toggleTheme);
+btnFly.addEventListener("click", flyPages);
+btnFire.addEventListener("click", toggleFire);

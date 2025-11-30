@@ -99,6 +99,60 @@ function startFire(){
     const r = bookContainer.getBoundingClientRect();
     fireContainer.style.left = r.left+r.width/2-30+"px";
     fireContainer.style.top  = r.top+r.height-60+"px";
+    
+    
+// 🔥 Crée des étincelles dans le feu
+function createSpark(){
+    if(!fireActive) return;
+
+    const spark = document.createElement("div");
+    spark.className = "spark";
+
+    // position au centre du feu
+    const r = fireContainer.getBoundingClientRect();
+    spark.style.left = r.width/2 + "px";
+    spark.style.top  = r.height/2 + "px";
+
+    // trajectoire aléatoire
+    const tx = (Math.random()-0.5)*40 + "px";
+    const ty = -(Math.random()*60 + 20) + "px";
+    spark.style.setProperty("--sx", tx);
+    spark.style.setProperty("--sy", ty);
+
+    fireContainer.appendChild(spark);
+    setTimeout(()=>spark.remove(),600);
+}
+
+// boucle pour créer les étincelles régulièrement
+let sparkInterval;
+function startSparks(){
+    if(sparkInterval) clearInterval(sparkInterval);
+    sparkInterval = setInterval(createSpark, 80);
+}
+
+function stopSparks(){
+    clearInterval(sparkInterval);
+}
+
+// Modification du toggleFire pour inclure les étincelles
+function startFire(){
+    fireActive = true;
+    if(!isOpen) toggleBook();
+
+    const r = bookContainer.getBoundingClientRect();
+    fireContainer.style.left = r.left + r.width/2 - 30 + "px";
+    fireContainer.style.top  = r.top + r.height - 80 + "px";
+
+    fireContainer.classList.add("active");
+    stopMagic();
+    startSparks();
+}
+
+function stopFire(){
+    fireActive = false;
+    fireContainer.classList.remove("active");
+    stopSparks();
+}
 
     fireContainer.classList.add("active");
     stopMagic();

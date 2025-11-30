@@ -126,17 +126,67 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 .particle { position:absolute; border-radius:50%; pointer-events:none; z-index:999; mix-blend-mode:screen; will-change:transform,opacity;}
 @keyframes floatUp {0%{opacity:0; transform:translate(0,0) scale(0);}10%{opacity:1; transform:translate(var(--tx), -50px) scale(1);}100%{opacity:0; transform:translate(var(--tx-end), -600px) scale(0);}}
 
-/* 🔥 Fogo fora do livro */
-.fire-container { position: absolute; z-index: 9999; width:60px; height:60px; pointer-events:none; opacity:0; transition:opacity 0.3s;}
-.fire-container.active { opacity:1; }
+/* 🔥 Feu plus réaliste */
+.fire-container {
+    position: absolute;
+    z-index: 9999;
+    width: 60px;
+    height: 80px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
 
-.flame-box { position: relative; width:60px; height:60px; }
-.flame { bottom:0; position:absolute; border-top-left-radius:50%; border-bottom-left-radius:50%; border-bottom-right-radius:50%; transform:rotate(-45deg) scale(1.5,1.5);}
-.red {height:50px;width:50px;left:5px;background:#ff4500;box-shadow:0 0 5px 4px #ff4500;}
-.orange {height:40px;width:40px;left:10px;background:#ffa500;box-shadow:0 0 9px 4px #ffa500;}
-.yellow {height:30px;width:30px;left:15px;background:#ffd700;box-shadow:0 0 9px 4px #ffd700;}
-.white {height:30px;width:30px;left:15px;bottom:-4px;background:#fff;box-shadow:0 0 9px 4px #fff;}
-.circle {border-radius:50%;position:absolute;}
-.blue {left:25px;bottom:-25px;width:10px;height:10px;background:#6a5acd;box-shadow:0 0 15px 10px #6a5acd;}
-.black {left:10px;bottom:-60px;width:40px;height:40px;background:#000;box-shadow:0 0 15px 10px #000;}
-@keyframes flicker {0%{transform:rotate(-1deg);}20%{transform:rotate(1deg);}40%{transform:rotate(-1deg);}60%{transform:rotate(1deg) scaleY(1.04);}80%{transform:rotate(-2deg) scaleY(0.92);}100%{transform:rotate(1deg);}}
+.fire-container.active {
+    opacity: 1;
+}
+
+/* Boîte pour les flammes */
+.flame-box {
+    position: relative;
+    width: 60px;
+    height: 80px;
+}
+
+/* Flammes animées */
+.flame {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 40px;
+    border-radius: 50% 50% 50% 50%;
+    background: radial-gradient(ellipse at bottom, #fff 0%, #ff0 20%, #f80 40%, #f00 60%, transparent 100%);
+    filter: blur(2px);
+    animation: flicker 0.4s infinite alternate;
+    opacity: 0.8;
+}
+
+/* Variation de taille et hauteur pour plusieurs flammes */
+.flame.red    { animation-duration: 0.35s; height: 50px; width: 25px; background: radial-gradient(circle at bottom, #ff4500 0%, #ff6347 30%, #ff8c00 60%, transparent 100%);}
+.flame.orange { animation-duration: 0.4s;  height: 45px; width: 20px; background: radial-gradient(circle at bottom, #ff8c00 0%, #ffa500 40%, #ffd700 60%, transparent 100%);}
+.flame.yellow { animation-duration: 0.45s; height: 35px; width: 15px; background: radial-gradient(circle at bottom, #ffff00 0%, #ffd700 50%, transparent 100%);}
+.flame.white  { animation-duration: 0.5s;  height: 25px; width: 10px; background: radial-gradient(circle at bottom, #fff 0%, #ffffaa 50%, transparent 100%);}
+
+@keyframes flicker {
+    0%   { transform: translateX(-50%) scaleY(1); opacity: 0.7;}
+    50%  { transform: translateX(-45%) scaleY(1.2); opacity: 1;}
+    100% { transform: translateX(-55%) scaleY(0.9); opacity: 0.6;}
+}
+
+/* Étincelles */
+.spark {
+    position: absolute;
+    border-radius: 50%;
+    width: 3px;
+    height: 3px;
+    background: #ffd700;
+    filter: blur(1px);
+    animation: sparkMove 0.6s linear forwards;
+}
+
+@keyframes sparkMove {
+    0% { transform: translate(0,0) scale(1); opacity: 1;}
+    100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0;}
+}

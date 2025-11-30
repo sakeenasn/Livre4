@@ -92,81 +92,63 @@ function stopMagic(){
 
 
 // ================== FEU ==================
-function startFire(){
-    fireActive = true;
-    if(!isOpen) toggleBook(); // Le livre doit être ouvert
+let flameElements = [];
+let smokeElement;
+let ashInterval;
 
-    const r = bookContainer.getBoundingClientRect();
-    fireContainer.style.left = r.left+r.width/2-30+"px";
-    fireContainer.style.top  = r.top+r.height-60+"px";
-    
-    
-// 🔥 Crée des étincelles dans le feu
-function createSpark(){
-    if(!fireActive) return;
-
-    const spark = document.createElement("div");
-    spark.className = "spark";
-
-    // position au centre du feu
-    const r = fireContainer.getBoundingClientRect();
-    spark.style.left = r.width/2 + "px";
-    spark.style.top  = r.height/2 + "px";
-
-    // trajectoire aléatoire
-    const tx = (Math.random()-0.5)*40 + "px";
-    const ty = -(Math.random()*60 + 20) + "px";
-    spark.style.setProperty("--sx", tx);
-    spark.style.setProperty("--sy", ty);
-
-    fireContainer.appendChild(spark);
-    setTimeout(()=>spark.remove(),600);
-}
-
-// boucle pour créer les étincelles régulièrement
-let sparkInterval;
-function startSparks(){
-    if(sparkInterval) clearInterval(sparkInterval);
-    sparkInterval = setInterval(createSpark, 80);
-}
-
-function stopSparks(){
-    clearInterval(sparkInterval);
-}
-
-// Modification du toggleFire pour inclure les étincelles
+// 🔥 Démarrer feu avancé
 function startFire(){
     fireActive = true;
     if(!isOpen) toggleBook();
 
     const r = bookContainer.getBoundingClientRect();
-    fireContainer.style.left = r.left + r.width/2 - 30 + "px";
-    fireContainer.style.top  = r.top + r.height - 80 + "px";
-
+    fireContainer.style.left = r.left + r.width/2 - 40 + "px";
+    fireContainer.style.top  = r.top + r.height - 120 + "px";
     fireContainer.classList.add("active");
     stopMagic();
+
+    // Création flammes
+    ["red","orange","yellow"].forEach(color=>{
+        const f = document.createElement("div");
+        f.className = "flame-adv " + color;
+        fireContainer.appendChild(f);
+        flameElements.push(f);
+    });
+
+    // Création fumée
+    smokeElement = document.createElement("div");
+    smokeElement.className = "smoke";
+    fireContainer.appendChild(smokeElement);
+
+    // Étincelles
     startSparks();
+
+    // Cendres tombantes
+    ashInterval = setInterval(()=>{
+        const ash = document.createElement("div");
+        ash.className = "ash";
+        ash.style.left = 30 + Math.random()*20 + "px"; // position dans le feu
+        fireContainer.appendChild(ash);
+        setTimeout(()=>ash.remove(),3000);
+    },100);
 }
 
+// 🔥 Arrêter feu avancé
 function stopFire(){
     fireActive = false;
     fireContainer.classList.remove("active");
+
+    // Supprimer flammes
+    flameElements.forEach(f=>f.remove());
+    flameElements = [];
+
+    // Supprimer fumée
+    if(smokeElement) smokeElement.remove();
+    smokeElement = null;
+
     stopSparks();
+    clearInterval(ashInterval);
 }
-
-    fireContainer.classList.add("active");
-    stopMagic();
-}
-
-function stopFire(){
-    fireActive = false;
-    fireContainer.classList.remove("active");
-}
-
-function toggleFire(){
-    fireActive ? stopFire() : startFire();
-}
-
 
 // ================== PAGES VOLANTES ==================
 function flyPages(){

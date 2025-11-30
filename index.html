@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<!-- Fond + étoiles -->
+<!-- Fundo e estrelas -->
 <div class="stars-container">
     <div class="stars-layer layer-1"></div>
     <div class="stars-layer layer-2"></div>
@@ -18,14 +18,14 @@
 
 <audio id="soundPage" src="page.mp3" preload="auto"></audio>
 
-<!-- Contrôles -->
+<!-- Controles -->
 <div class="controls">
-    <button id="themeBtn">Changer d'ambiance</button>
-    <button id="flyBtn">Faire voler les pages</button>
-    <button id="fireBtn">Feu</button>
+    <button id="themeBtn" onclick="toggleTheme()">Changer d'ambiance</button>
+    <button onclick="flyPages()">Faire voler les pages</button>
+    <button onclick="toggleFire()">Feu</button>
 </div>
 
-<!-- Livre -->
+<!-- Livro -->
 <div class="book-container" id="bookContainer">
     <div class="book">
         <div class="page back-cover"></div>
@@ -44,8 +44,17 @@
     </div>
 </div>
 
-<!-- Feu -->
-<div class="fire-container" id="fireContainer"></div>
+<!-- 🔥 Fogo fora do livro (para ficar acima das páginas) -->
+<div class="fire-container" id="fireContainer">
+    <div class="flame-box">
+        <div class="flame red"></div>
+        <div class="flame orange"></div>
+        <div class="flame yellow"></div>
+        <div class="flame white"></div>
+        <div class="circle blue"></div>
+        <div class="circle black"></div>
+    </div>
+</div>
 
 <script src="script.js"></script>
 </body>

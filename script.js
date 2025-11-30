@@ -12,17 +12,12 @@ let isOpen = false;
 let fireActive = false;
 let particleInterval;
 let magicTimeout;
-const colors = ['#ffd700','#ff9a9e','#a18cd1','#ffffff','#84fab0'];
 
-// ================== EVENTS ==================
-btnTheme.addEventListener("click", toggleTheme);
-btnFly.addEventListener("click", flyPages);
-btnFire.addEventListener("click", toggleFire);
-bookContainer.addEventListener("click", toggleBook);
+const colors = ['#ffd700','#ff9a9e','#a18cd1','#ffffff','#84fab0'];
 
 // ================== SONS ==================
 function playSound(id){
-    let sound = document.getElementById(id);
+    const sound = document.getElementById(id);
     if(sound){
         sound.currentTime = 0;
         sound.play().catch(()=>{});
@@ -30,24 +25,22 @@ function playSound(id){
 }
 
 // ================== THEME ==================
-function toggleTheme(){
+btnTheme.addEventListener("click", () => {
     body.classList.toggle("dark-mode");
     body.style.transition = "1.5s";
-}
+});
 
 // ================== OUVERTURE LIVRE ==================
+bookContainer.addEventListener("click", toggleBook);
+
 function toggleBook(){
     if(fireActive && isOpen) return; // Sécurité
     isOpen = !isOpen;
 
     if(isOpen){
         bookContainer.classList.add("open");
-        const pageTurnDelay = 200;
-        setTimeout(()=>playSound("soundPage"), 300);
-        setTimeout(()=>playSound("soundPage"), 300+pageTurnDelay);
-        setTimeout(()=>playSound("soundPage"), 300+2*pageTurnDelay);
-
-        magicTimeout = setTimeout(startMagic, 500);
+        playSound("soundPage");
+        magicTimeout = setTimeout(startMagic, 400);
     } else {
         bookContainer.classList.remove("open");
         stopMagic();
@@ -58,8 +51,10 @@ function toggleBook(){
 // ================== EFFET PARTICULES ==================
 function createParticle(){
     if(!isOpen) return;
+
     const p = document.createElement("div");
     p.className = "particle";
+
     const size = Math.random()*10+5;
     p.style.width = p.style.height = size+"px";
 
@@ -77,60 +72,49 @@ function createParticle(){
     p.style.setProperty("--tx-end", `${(Math.random()-0.5)*700}px`);
 
     p.style.animation = `floatUp ${2+Math.random()*2}s ease-out forwards`;
+
     document.body.appendChild(p);
     setTimeout(()=>p.remove(),3000);
 }
 
-function startMagic(){ stopMagic(); particleInterval = setInterval(createParticle,25);}
-function stopMagic(){ clearInterval(particleInterval); }
+function startMagic(){
+    stopMagic();
+    particleInterval = setInterval(createParticle,25);
+}
+function stopMagic(){
+    clearInterval(particleInterval);
+}
 
 // ================== PAGES VOLANTES ==================
+btnFly.addEventListener("click", flyPages);
+
 function flyPages(){
-    const pages = document.querySelectorAll('.page:not(.front-cover):not(.back-cover)');
-    pages.forEach((page,i)=>{
-        setTimeout(()=>{
-            const flyingPage = page.cloneNode(true);
-            const rect = page.getBoundingClientRect();
-            flyingPage.style.position = 'absolute';
-            flyingPage.style.left = rect.left+'px';
-            flyingPage.style.top = rect.top+'px';
-            flyingPage.style.width = rect.width+'px';
-            flyingPage.style.height = rect.height+'px';
-            flyingPage.style.pointerEvents = 'none';
-            flyingPage.style.zIndex = 1000;
-            flyingPage.style.transition = 'transform 4s ease-out, opacity 4s ease-out';
-
-            document.body.appendChild(flyingPage);
-
-            const endX = (Math.random()-0.5)*window.innerWidth*2;
-            const endY = (Math.random()-0.5)*window.innerHeight*2;
-            const rotateX = (Math.random()-0.5)*1080;
-            const rotateY = (Math.random()-0.5)*1080;
-
-            requestAnimationFrame(()=>{
-                flyingPage.style.transform = `translate(${endX}px,${endY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                flyingPage.style.opacity = 0;
-            });
-
-            setTimeout(()=>flyingPage.remove(),4000);
-        }, i*100);
+    const pages = bookContainer.querySelectorAll(".inner-page");
+    pages.forEach((page, index) => {
+        page.classList.add("fly");
+        // On enlève la classe après l'animation
+        page.addEventListener("animationend", ()=> page.classList.remove("fly"), {once:true});
     });
 }
 
-// ================== FEU AVANCÉ ==================
+// ================== FEU ==================
+// Variables globales pour le feu avancé
 let flameElements = [];
 let smokeElement = null;
 let ashInterval = null;
 let sparkInterval = null;
 
+// Étincelles
 function createSpark(){
     if(!fireActive) return;
     const spark = document.createElement("div");
     spark.className = "spark";
-    spark.style.left = "30px";
-    spark.style.top  = "60px";
-    spark.style.setProperty("--sx", (Math.random()-0.5)*40 + "px");
-    spark.style.setProperty("--sy", -(Math.random()*60 + 20) + "px");
+    spark.style.left = 30 + "px";
+    spark.style.top  = 60 + "px";
+    const tx = (Math.random()-0.5)*40 + "px";
+    const ty = -(Math.random()*60 + 20) + "px";
+    spark.style.setProperty("--sx", tx);
+    spark.style.setProperty("--sy", ty);
     fireContainer.appendChild(spark);
     setTimeout(()=>spark.remove(),600);
 }
@@ -139,23 +123,27 @@ function startSparks(){
     if(sparkInterval) clearInterval(sparkInterval);
     sparkInterval = setInterval(createSpark, 80);
 }
-
 function stopSparks(){
     clearInterval(sparkInterval);
     sparkInterval = null;
 }
+
+// Toggle feu
+btnFire.addEventListener("click", toggleFire);
 
 function startFire(){
     if(fireActive) return;
     fireActive = true;
     if(!isOpen) toggleBook();
 
+    // Position du conteneur feu
     const r = bookContainer.getBoundingClientRect();
     fireContainer.style.left = r.left + r.width/2 - 40 + "px";
     fireContainer.style.top  = r.top + r.height - 120 + "px";
     fireContainer.classList.add("active");
     stopMagic();
 
+    // Flammes
     ["red","orange","yellow"].forEach(color=>{
         const f = document.createElement("div");
         f.className = "flame-adv " + color;
@@ -163,14 +151,17 @@ function startFire(){
         flameElements.push(f);
     });
 
+    // Fumée
     if(!smokeElement){
         smokeElement = document.createElement("div");
         smokeElement.className = "smoke";
         fireContainer.appendChild(smokeElement);
     }
 
+    // Étincelles
     startSparks();
 
+    // Cendres
     ashInterval = setInterval(()=>{
         const ash = document.createElement("div");
         ash.className = "ash";
@@ -183,12 +174,21 @@ function startFire(){
 function stopFire(){
     fireActive = false;
     fireContainer.classList.remove("active");
+
     flameElements.forEach(f=>f.remove());
     flameElements = [];
-    if(smokeElement){ smokeElement.remove(); smokeElement = null; }
+
+    if(smokeElement){
+        smokeElement.remove();
+        smokeElement = null;
+    }
+
     stopSparks();
+
     clearInterval(ashInterval);
     ashInterval = null;
 }
 
-function toggleFire(){ fireActive ? stopFire() : startFire(); }
+function toggleFire(){
+    fireActive ? stopFire() : startFire();
+}

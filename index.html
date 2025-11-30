@@ -1,49 +1,61 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Grimoire Magique Interactif</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Grimoire Magique Interactif</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="stars-container">
-        <div class="stars-layer layer-1"></div>
-        <div class="stars-layer layer-2"></div>
-        <div class="stars-layer layer-3"></div>
-    </div>
+<!-- Fundo e estrelas -->
+<div class="stars-container">
+    <div class="stars-layer layer-1"></div>
+    <div class="stars-layer layer-2"></div>
+    <div class="stars-layer layer-3"></div>
+</div>
+<div class="library-bg"></div>
 
-    <div class="library-bg"></div>
+<audio id="soundPage" src="page.mp3" preload="auto"></audio>
 
-    <audio id="soundPage" src="page.mp3" preload="auto"></audio>
+<!-- Controles -->
+<div class="controls">
+    <button id="themeBtn" onclick="toggleTheme()">Changer d'ambiance</button>
+    <button onclick="flyPages()">Faire voler les pages</button>
+    <button onclick="toggleFire()">Feu</button>
+</div>
 
-    <div class="controls">
-        <button id="themeBtn" onclick="toggleTheme()">✨ Changer d'ambiance</button>
-    </div>
-
-    <div class="book-container" id="bookContainer" onclick="toggleBook()">
-        <div class="book">
-            <div class="page back-cover"></div>
-            <div class="spine"></div>
-
-            <div class="page inner-page p3">
-                <div class="page-content">
-                    <p>...et la magie opéra.</p>
-                </div>
-            </div>
-            <div class="page inner-page p2"></div>
-            <div class="page inner-page p1"></div>
-
-            <div class="page front-cover">
-                <div class="cover-content">
-                    <h1>Le Grimoire</h1>
-                    <div class="ornament"></div>
-                </div>
+<!-- Livro -->
+<div class="book-container" id="bookContainer">
+    <div class="book">
+        <div class="page back-cover"></div>
+        <div class="spine"></div>
+        <div class="page inner-page p3">
+            <div class="page-content"><p>...et la magie commence.</p></div>
+        </div>
+        <div class="page inner-page p2"></div>
+        <div class="page inner-page p1"></div>
+        <div class="page front-cover">
+            <div class="cover-content">
+                <h1>Le Grimoire</h1>
+                <div class="ornament"></div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="script.js"></script>
+<!-- 🔥 Fogo fora do livro (para ficar acima das páginas) -->
+<div class="fire-container" id="fireContainer">
+    <div class="flame-box">
+        <div class="flame red"></div>
+        <div class="flame orange"></div>
+        <div class="flame yellow"></div>
+        <div class="flame white"></div>
+        <div class="circle blue"></div>
+        <div class="circle black"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

@@ -226,15 +226,16 @@ function toggleLumiere() {
         return;
     }
 
-    // créer le faisceau toutes les 800ms
-    lumiereInterval = setInterval(() => {
-        const beam = document.createElement('div');
-        beam.classList.add('lumiere-beam');
+        // positionner exactement au centre de #particleOrigin
+        const origin = document.getElementById('particleOrigin');
+        const rect = origin.getBoundingClientRect();
 
-        // positionner au centre de #particleOrigin
-        const origin = document.getElementById('particleOrigin').getBoundingClientRect();
-        beam.style.left = `${origin.left + origin.width / 2 - 350}px`; // 350 = moitié de la largeur du faisceau
-        beam.style.top  = `${origin.top + origin.height / 2}px`;
+        // ici on tient compte du translate(-50%, -50%)
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
+        beam.style.left = `${x - 350}px`; // 350 = moitié largeur faisceau
+        beam.style.top  = `${y}px`;
 
         document.body.appendChild(beam);
 

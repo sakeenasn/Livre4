@@ -1,54 +1,90 @@
-const bookContainer = document.getElementById("bookContainer");
+const bookContainer = document.getElementById('bookContainer');
+const body = document.body;
 let isOpen = false;
-let particles;
+let particleInterval;
+let magicTimeout;
 
-/* === OUVERTURE DU LIVRE === */
-function toggleBook(){
+// Couleurs magiques
+const colors = ['#ffd700', '#ff9a9e', '#a18cd1', '#ffffff', '#84fab0'];
+
+// 🔊 Jouer un son
+function playSound(audioId) {
+    const audio = document.getElementById(audioId);
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(e => console.log("Erreur audio : " + e));
+}
+
+// 🌙 Changement d’ambiance
+function toggleTheme() {
+    body.classList.toggle('dark-mode');
+}
+
+// 📖 Ouverture / fermeture du grimoire
+function toggleBook() {
     isOpen = !isOpen;
-    bookContainer.classList.toggle("open");
 
-    if(isOpen){
-        setTimeout(()=>startMagic(), 1200); // Attendre que le livre s'ouvre
+    if (isOpen) {
+        bookContainer.classList.add('open');
+
+        // Effet sonore des pages
+        setTimeout(()=> playSound('soundPage'), 300);
+        setTimeout(()=> playSound('soundPage'), 500);
+        setTimeout(()=> playSound('soundPage'), 700);
+
+        // Lancement magie après ouverture
+        magicTimeout = setTimeout(startMagic, 2200);
+
     } else {
-        clearInterval(particles);
+        bookContainer.classList.remove('open');
+        clearTimeout(magicTimeout);
+        stopMagic();
     }
 }
 
-/* === PARTICULES === */
-function createParticle(){
-    if(!isOpen) return;
+// ✨ Génération d'une particule
+function createParticle() {
+    if (!isOpen) return;
+    const p = document.createElement('div');
+    p.classList.add('particle');
 
-    const p = document.createElement("div");
-    p.classList.add("particle");
+    const size = Math.random()*8 + 3;
+    p.style.width = p.style.height = size + "px";
 
-    p.style.width  = p.style.height = (Math.random()*6+4)+"px";
-    p.style.background = "rgba(255,255,200,0.9)";
-
-    const rect=bookContainer.getBoundingClientRect();
-    p.style.left = rect.left + rect.width*0.48 + "px";
-    p.style.top  = rect.top  + rect.height*0.42 + "px";
-
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(),3000);
-}
-
-/* === FAISCEAU 180° DU CENTRE DU LIVRE === */
-function triggerMagic(){
-
-    const beam = document.createElement("div");
-    beam.classList.add("magic-beam");
-    document.body.appendChild(beam);
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    p.style.background = color;
+    p.style.boxShadow = `0 0 ${size*2}px ${color}`;
 
     const rect = bookContainer.getBoundingClientRect();
+    p.style.left = rect.left + "px";
+    p.style.top  = (rect.top + rect.height/2 + (Math.random()*150-75)) + "px";
 
-    beam.style.left = rect.left + rect.width*0.165 + "px"; 
-    beam.style.top  = rect.top  + rect.height*0.45 + "px";
+    p.style.setProperty('--tx',  `${(Math.random()-0.5)*50}px`);
+    p.style.setProperty('--tx-end', `${(Math.random()-0.5)*400}px`);
+    p.style.animation = `floatUp ${Math.random()*2+2}s ease-out forwards`;
 
-    setTimeout(()=>beam.remove(),2800);
+    document.body.appendChild(p);
+    setTimeout(()=> p.remove(), 3000);
 }
 
-/* === LANCEMENT MAGIE === */
-function startMagic(){
-    triggerMagic();
-    particles = setInterval(createParticle,80);
+// 🌟 Effet magie continu
+function startMagic() {
+    stopMagic();
+    for(let i=0;i<20;i++) setTimeout(createParticle,i*50);
+    particleInterval = setInterval(createParticle,50);
+}
+
+// 🛑 Stop effets
+function stopMagic() {
+    clearInterval(particleInterval);
+}
+
+// 🚀 Effet HALO lumineux déclenché par le bouton
+function triggerMagic() {
+    const halo = document.createElement("div");
+    halo.classList.add("magic-halo");
+    document.body.appendChild(halo);
+
+    setTimeout(()=> halo.remove(),2000);
+    startMagic();      // particules déjà configurées 🔥
 }

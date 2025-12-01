@@ -205,21 +205,24 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     position: absolute;
     width: 0;
     height: 0;
-    border-left: 300px solid transparent;   /* Largeur gauche du faisceau */
-    border-right: 300px solid transparent;  /* Largeur droite du faisceau */
-    border-bottom: 500px solid rgba(255,255,200,0.9); /* Rayon lumineux */
-    
-    filter: blur(15px) brightness(1.8) saturate(1.4);
-    opacity: 0;
-    transform-origin: bottom center;
-    animation: BEAM_UPWARD 2.6s ease-out forwards;
+
+    /* 180° — lumière qui s'ouvre vers le haut */
+    border-left: 260px solid transparent;
+    border-right: 260px solid transparent;
+    border-bottom: 480px solid rgba(255,255,210,0.92);
+
+    filter: blur(25px) brightness(2.2);
+    opacity: 0.95;
+
     pointer-events: none;
-    z-index: 999999;
+    transform-origin: bottom center;
+    animation: beamExpand 2.8s ease-out forwards;
+    z-index: 2000;
 }
 
-/* Faisceau qui monte + ouverture 180° */
-@keyframes BEAM_UPWARD {
-    0%   { transform: scaleY(0.1); opacity: 1; }
-    50%  { transform: scaleY(1.2); opacity: 1; }
-    100% { transform: scaleY(2.3); opacity: 0; }
+/* Animation d’ouverture des cieux */
+@keyframes beamExpand {
+    0%   { transform: scaleY(0.1) scaleX(0.2); opacity: 1; }
+    60%  { transform: scaleY(1.4) scaleX(1.1); opacity: 1; }
+    100% { transform: scaleY(2.4) scaleX(1.7); opacity: 0; }
 }

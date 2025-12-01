@@ -218,16 +218,22 @@ function resetBook() {
 
 //button lumiere
 function toggleLumiere() {
-    if (!isOpen) return; // Ne fonctionne que si le livre est ouvert
+    if (!isOpen) return; // ne fonctionne que si le livre est ouvert
 
-    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+    // Récupérer le rectangle du livre
+    const bookRect = document.getElementById('bookContainer').getBoundingClientRect();
 
+    // Calculer le centre exact du livre
+    const centerX = bookRect.left + bookRect.width / 2;
+    const centerY = bookRect.top + bookRect.height / 2;
+
+    // Créer le faisceau lumineux
     const beam = document.createElement('div');
     beam.classList.add('magic-beam');
 
-    // Positionner exactement au centre des particules
-    beam.style.left = origin.left + origin.width / 2 + 'px';
-    beam.style.top  = origin.top + origin.height / 2 + 'px';
+    // Positionner au centre du livre
+    beam.style.left = `${centerX}px`;
+    beam.style.top = `${centerY}px`;
 
     document.body.appendChild(beam);
 

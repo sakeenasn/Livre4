@@ -200,6 +200,16 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     100% { opacity: 0; transform: translate(var(--tx-end), -600px) scale(0); }
 }
 
+/*pour centrer la lumiere*/
+.center-point {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
 /*bouton lumiere*/
 #magicBtn {
     position: fixed;   /* fixed au lieu de absolute pour rester visible */

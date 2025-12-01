@@ -216,3 +216,29 @@ function resetBook() {
 }
 
 
+//button lumiere
+function toggleLumiere() {
+    if (lumiereInterval) {
+        // arrêter le faisceau si déjà actif
+        clearInterval(lumiereInterval);
+        lumiereInterval = null;
+        document.querySelectorAll('.lumiere-beam').forEach(b => b.remove());
+        return;
+    }
+
+    // créer le faisceau toutes les 800ms
+    lumiereInterval = setInterval(() => {
+        const beam = document.createElement('div');
+        beam.classList.add('lumiere-beam');
+
+        // positionner au centre de #particleOrigin
+        const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+        beam.style.left = `${origin.left + origin.width / 2 - 350}px`; // 350 = moitié de la largeur du faisceau
+        beam.style.top  = `${origin.top + origin.height / 2}px`;
+
+        document.body.appendChild(beam);
+
+        // supprimer après animation
+        setTimeout(() => beam.remove(), 2600);
+    }, 800);
+}

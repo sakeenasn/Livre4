@@ -218,24 +218,21 @@ function resetBook() {
 
 //button lumiere
 function toggleLumiere() {
-    // On crée un faisceau unique à chaque clic
-    const origin = document.getElementById('particleOrigin');
-    const rect = origin.getBoundingClientRect();
-
-    // Calcul du centre exact du #particleOrigin
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const beam = document.createElement('div');
-    beam.classList.add('lumiere-beam');
-
-    // On positionne le faisceau
-    // largeur du faisceau = 700px, donc on décale de 350 pour centrer
-    beam.style.left = `${centerX - 350}px`;
-    beam.style.top = `${centerY}px`;
-
+    // Crée le faisceau lumineux
+    const beam = document.createElement("div");
+    beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    // On supprime le faisceau après son animation
+    // Récupère la position du centre des particules
+    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+    const startX = origin.left + origin.width / 2;
+    const startY = origin.top + origin.height / 2;
+
+    // Largeur du faisceau (déjà définie dans CSS comme 700px, donc on centre)
+    const beamWidth = 700;
+    beam.style.left = `${startX - beamWidth / 2}px`;
+    beam.style.top = `${startY}px`;
+
+    // Supprime le faisceau après l'animation
     setTimeout(() => beam.remove(), 2600);
 }

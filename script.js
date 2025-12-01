@@ -86,16 +86,14 @@ function stopMagic() {
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    // On récupère la position du livre
+    // Position exacte du livre
     const rect = bookContainer.getBoundingClientRect();
 
-    // Centre exact du livre ✨
-    beam.style.left = (rect.left + rect.width/2 - 70) + "px";  // 70 = moitié de la largeur du rayon
-    beam.style.top  = (rect.top + rect.height/2 - 40) + "px"; // Ajuste si tu veux plus haut/bas
+    // Position pile au centre du livre, à sa reliure intérieure
+    beam.style.left = (rect.left + rect.width / 2 - 300) + "px";   // alignement horizontal parfait
+    beam.style.top = (rect.top + rect.height * 0.65) + "px";        // 0.65 = centre bas du livre
 
-    // Retrait du rayon après explosion
-    setTimeout(()=> beam.remove(), 2900);
+    setTimeout(()=> beam.remove(), 2800);
 
-    // Particules magiques déjà dans ton code
     startMagic();
 }

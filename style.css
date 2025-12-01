@@ -1,14 +1,29 @@
-/* === VARIABLES === */
+/* --- VARIABLES --- */
 :root {
+    /* Mode Bibliothèque (Par défaut) */
     --bg-radial-center: #8e5e48;
     --bg-radial-edge: #2c1810;
+    --book-color: #5d2e22;
     --gold: #f5deb3;
     --page-color: #f5deb3;
-    --book-color: #5d2e22;
     --text-color: #f5deb3;
+    --star-opacity: 0;
+    --library-opacity: 1;
 }
 
-/* === GLOBAL === */
+body.dark-mode {
+    /* Mode Nuit Étoilée */
+    --bg-radial-center: #1a1a2e;
+    --bg-radial-edge: #000000;
+    --book-color: #1a237e;
+    --gold: #d2b48c;
+    --page-color: #d2b48c;
+    --text-color: #000;
+    --star-opacity: 1;
+    --library-opacity: 0;
+}
+
+/* --- CONFIGURATION GENERALE --- */
 body {
     margin: 0;
     height: 100vh;
@@ -16,95 +31,216 @@ body {
     justify-content: center;
     align-items: center;
     background: #000;
-    font-family: "Georgia", serif;
+    font-family: 'Georgia', serif;
     overflow: hidden;
+    perspective: 2000px;
 }
 
-/* === BOUTON MAGIE (CENTRÉ EN HAUT) === */
+/* FOND BIBLIOTHEQUE (Simulé par dégradé) */
+.library-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, var(--bg-radial-center), var(--bg-radial-edge));
+    opacity: var(--library-opacity);
+    transition: opacity 1.5s ease;
+    z-index: -2;
+}
+
+/* FOND ETOILÉ */
+.stars-container {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: -1;
+    opacity: var(--star-opacity);
+    transition: opacity 1.5s ease;
+}
+.stars-layer {
+    position: absolute; inset: 0;
+    /* Grande densité d'étoiles aléatoires */
+    background-image: 
+        radial-gradient(1px 1px at 10px 10px, #fff, transparent), radial-gradient(1px 1px at 50px 80px, #fff, transparent),
+        radial-gradient(2px 2px at 120px 30px, #eee, transparent), radial-gradient(2px 2px at 180px 150px, #fff, transparent),
+        radial-gradient(1px 1px at 250px 90px, #ddd, transparent), radial-gradient(1px 1px at 300px 200px, #fff, transparent),
+        radial-gradient(2px 2px at 400px 150px, #eee, transparent), radial-gradient(1px 1px at 500px 250px, #fff, transparent),
+        radial-gradient(2px 2px at 600px 100px, #ddd, transparent), radial-gradient(1px 1px at 700px 300px, #fff, transparent),
+        radial-gradient(1px 1px at 800px 50px, #eee, transparent), radial-gradient(2px 2px at 900px 220px, #fff, transparent),
+        radial-gradient(1px 1px at 50px 450px, #ddd, transparent), radial-gradient(2px 2px at 200px 350px, #fff, transparent),
+        radial-gradient(1px 1px at 450px 600px, #eee, transparent), radial-gradient(2px 2px at 650px 400px, #fff, transparent);
+        
+    background-repeat: repeat;
+    animation: moveStars linear infinite;
+}
+.layer-1 { 
+    background-size: 500px 500px; 
+    animation-duration: 60s; 
+    opacity: 0.5; 
+}
+.layer-2 { 
+    background-size: 800px 800px; 
+    animation-duration: 100s; 
+    opacity: 0.7; 
+}
+.layer-3 { 
+    background-size: 400px 400px;
+    animation-duration: 150s; 
+    opacity: 1; 
+}
+
+@keyframes moveStars { 
+    from { transform: translateY(0); } 
+    to { transform: translateY(-100%); } 
+}
+
+/* --- BOUTON --- */
+.controls { position: absolute; top: 30px; z-index: 100; }
+button {
+    padding: 12px 25px; border: 2px solid var(--gold); border-radius: 30px;
+    background: rgba(0,0,0,0.6); color: var(--gold);
+    font-family: 'Georgia', serif; font-size: 1em; cursor: pointer;
+    transition: 0.3s; backdrop-filter: blur(5px);
+}
+button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
+
+/* --- LE LIVRE --- */
+.book-container {
+    position: relative; width: 320px; height: 460px;
+    transform-style: preserve-3d; cursor: pointer;
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.book-container.open { transform: translateX(160px); }
+
+.book {
+    width: 100%; height: 100%; position: relative;
+    transform-style: preserve-3d;
+}
+
+/* --- PAGES ET EFFET VIEILLI --- */
+.page {
+    position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+    transform-origin: left; transform-style: preserve-3d;
+    border-radius: 4px 12px 12px 4px;
+    background: var(--page-color);
+    box-shadow: inset 15px 0 30px rgba(0,0,0,0.1), 2px 0 5px rgba(0,0,0,0.1);
+    transition: transform 2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+.inner-page {
+    background-image: 
+        radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 10px 10px;
+    background-position: 0 0, 5px 5px;
+}
+
+/* Couverture Avant - Contient la bordure sur les bords extérieurs */
+.front-cover {
+    background: var(--book-color); 
+    z-index: 20;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    
+    /* BORDURE D'ORNEMENT SUR LE BORD EXTÉRIEUR */
+    border: 5px solid var(--gold); 
+    
+    /* Maintient la transition */
+    transition: background-color 1s, transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cover-content {
+    text-align: center; 
+    padding: 30px; 
+    border-radius: 10px; 
+    color: var(--gold);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Dos du livre */
+.back-cover {
+    background: var(--book-color); z-index: 0;
+    transform: translateZ(-30px);
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.5);
+    transition: background-color 1s;
+}
+.spine {
+    position: absolute; top: 0; left: 0; width: 30px; height: 100%;
+    background: #3e2723;
+    transform: rotateY(-90deg) translateX(-15px);
+    transform-origin: left;
+}
+
+/* Z-index initial */
+.p1 { z-index: 15; }
+.p2 { z-index: 14; }
+.p3 { z-index: 13; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; box-sizing: border-box;}
+
+/* --- SEQUENCE D'OUVERTURE (Effet Vent) --- */
+
+/* 🔥 CORRECTION DU PROBLÈME DE DISPARITION : La couverture tourne sans délai pour masquer immédiatement les pages 🔥 */
+.book-container.open .front-cover { 
+    transform: rotateY(-180deg); 
+    transition-delay: 0s; 
+}
+
+/* Les pages tournent avec un DÉLAI pour simuler le feuilletage après la couverture */
+.book-container.open .p1 { transform: rotateY(-170deg); transition-delay: 0.1s; } 
+.book-container.open .p2 { transform: rotateY(-160deg); transition-delay: 0.3s; }
+.book-container.open .p3 { transform: rotateY(-10deg); transition-delay: 0.5s; background: linear-gradient(to right, #ddd, var(--page-color) 10%); border-left: none;}
+
+/* --- PARTICULES --- */
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999;
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+}
+
+@keyframes floatUp {
+    0% { opacity: 0; transform: translate(0, 0) scale(0); }
+    10% { opacity: 1; transform: translate(var(--tx), -50px) scale(1); }
+    100% { opacity: 0; transform: translate(var(--tx-end), -600px) scale(0); }
+}
+
 #magicBtn {
     position: absolute;
-    top: 25px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 14px 32px;
     font-size: 1.2em;
-    background: rgba(255,255,255,0.1);
-    border: 2px solid gold;
-    color: gold;
+    padding: 15px 30px;
     border-radius: 40px;
-    backdrop-filter: blur(4px);
+    border: 2px solid gold;
+    background: rgba(255,255,255,0.1);
+    color: gold;
     cursor: pointer;
     transition: 0.4s;
+    backdrop-filter: blur(5px);
 }
+
 #magicBtn:hover {
     transform: translateX(-50%) scale(1.1);
     background: gold;
     color: black;
 }
 
-/* === LIVRE === */
-.book-container {
-    width: 320px;
-    height: 450px;
-    transform-style: preserve-3d;
-    cursor: pointer;
-    transition: transform 1.2s cubic-bezier(0.25,1,0.5,1);
-}
-.book-container.open { transform: translateX(160px); }
-
-.book { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; }
-
-/* === PAGES === */
-.page {
+/* Effet HALO qui sort du livre */
+.magic-halo {
     position: absolute;
-    width: 100%; height: 100%;
-    top: 0; left: 0;
-    background: var(--page-color);
-    border-radius: 4px 10px 10px 4px;
-    transform-origin: left;
-    transition: transform 1.7s ease;
-}
-.front-cover  { background: var(--book-color); border: 5px solid gold; z-index: 20; }
-.back-cover   { background: var(--book-color); z-index: 0; transform: translateZ(-30px); }
-.p1 { z-index: 15; } .p2 { z-index: 14; } .p3 { z-index: 13; }
-
-/* === ANIMATION OUVERTURE === */
-.book-container.open .front-cover { transform: rotateY(-180deg); }
-.book-container.open .p1 { transform: rotateY(-170deg); }
-.book-container.open .p2 { transform: rotateY(-160deg); }
-.book-container.open .p3 { transform: rotateY(-10deg); }
-
-/* === PARTICULES === */
-.particle {
-    position: absolute;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     pointer-events: none;
-    mix-blend-mode: screen;
-    z-index: 999999;
-    animation: rise 3s linear forwards;
-}
-@keyframes rise {
-    0%   { transform: translateY(0) scale(.5); opacity: 1; }
-    100% { transform: translateY(-300px) scale(1.4); opacity: 0; }
-}
-
-/* === FAISCEAU MAGIQUE (180°) === */
-.magic-beam {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 260px solid transparent;
-    border-right: 260px solid transparent;
-    border-bottom: 460px solid rgba(255,255,220,0.9);
-    filter: blur(22px) brightness(2.3);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -60%);
+    background: radial-gradient(circle, rgba(255,255,200,1), rgba(255,255,200,0));
     opacity: 0;
-    transform-origin: bottom center;
-    animation: beamExpand 2.6s ease-out forwards;
-    z-index: 99999;
+    animation: haloBurst 2s ease-out forwards;
+    box-shadow: 0 0 60px gold;
+    z-index: 999;
 }
 
-@keyframes beamExpand {
-    0%   { opacity:1; transform:scaleY(.1) scaleX(.2); }
-    70%  { opacity:1; transform:scaleY(1.5) scaleX(1.1);}
-    100% { opacity:0; transform:scaleY(2.6) scaleX(1.7);}
+@keyframes haloBurst {
+    0%   { transform: translate(-50%, -60%) scale(0.3); opacity: 0.8; }
+    60%  { transform: translate(-50%, -100%) scale(2); opacity: 1; }
+    100% { transform: translate(-50%, -120%) scale(3.2); opacity: 0; }
 }

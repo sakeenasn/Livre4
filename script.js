@@ -226,12 +226,12 @@ function toggleLumiere() {
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    // Récupère le centre du livre ouvert
+    // Récupère le centre du livre (là où partent les particules)
     const origin = document.getElementById('particleOrigin').getBoundingClientRect();
     const centerX = origin.left + origin.width / 2;
     const centerY = origin.top + origin.height / 2;
 
-    // Largeur du faisceau = 700px comme dans le CSS
+    // Largeur du faisceau = 700px
     const beamWidth = 700;
     beam.style.left = `${centerX - beamWidth / 2}px`;
     beam.style.top = `${centerY}px`;

@@ -218,20 +218,23 @@ function resetBook() {
 
 //button lumiere
 function toggleLumiere() {
+    // Vérifie si le livre est ouvert
+    if (!isOpen) return;
+
     // Crée le faisceau lumineux
     const beam = document.createElement("div");
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    // Récupère la position du centre des particules
+    // Récupère le centre du livre ouvert
     const origin = document.getElementById('particleOrigin').getBoundingClientRect();
-    const startX = origin.left + origin.width / 2;
-    const startY = origin.top + origin.height / 2;
+    const centerX = origin.left + origin.width / 2;
+    const centerY = origin.top + origin.height / 2;
 
-    // Largeur du faisceau (déjà définie dans CSS comme 700px, donc on centre)
+    // Largeur du faisceau = 700px comme dans le CSS
     const beamWidth = 700;
-    beam.style.left = `${startX - beamWidth / 2}px`;
-    beam.style.top = `${startY}px`;
+    beam.style.left = `${centerX - beamWidth / 2}px`;
+    beam.style.top = `${centerY}px`;
 
     // Supprime le faisceau après l'animation
     setTimeout(() => beam.remove(), 2600);

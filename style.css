@@ -200,47 +200,50 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     100% { opacity: 0; transform: translate(var(--tx-end), -600px) scale(0); }
 }
 
+/*bouton faiseau de lumiere*/
 #magicBtn {
     position: absolute;
-    right: 40px;   /* Bouton à droite */
-    bottom: 40px;
+    top: 25px;      /* ⬆ AU LIEU DE BOTTOM */
+    right: 25px;    /* ➡ */
     font-size: 1.2em;
     padding: 15px 30px;
     border-radius: 40px;
     border: 2px solid gold;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.15);
     color: gold;
     cursor: pointer;
     transition: 0.4s;
     backdrop-filter: blur(5px);
 }
 #magicBtn:hover {
-    transform: scale(1.1);
+    transform: scale(1.12);
     background: gold;
     color: black;
 }
-/* FAISCEAU DE LUMIÈRE */
+/* FAISCEAU ULTRA LUMINEUX */
 .magic-beam {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -20%);
-    width: 80px;
-    height: 300px;
-    background: radial-gradient(circle at center,
-        rgba(255,255,200,0.9),
-        rgba(255,255,200,0.4) 40%,
-        rgba(255,255,200,0.0) 100%
-    );
-    filter: blur(8px);
-    opacity: 0;
-    animation: beamRise 2.2s ease-out forwards;
+    width: 140px;          /* + Large + visible */
+    height: 500px;         /* + Haut */
     pointer-events: none;
-    z-index: 999;
+    z-index: 9999;
+
+    background: linear-gradient(
+        rgba(255,255,200,0.95),
+        rgba(255,255,200,0.6),
+        rgba(255,255,200,0.05)
+    );
+
+    filter: blur(6px) saturate(2) brightness(2.2);
+    opacity: 0;
+    transform-origin: center bottom;
+    animation: BEAM_EXPLODE 2.8s ease-out forwards;
 }
 
-@keyframes beamRise {
-    0%   { transform: translate(-50%,100%) scaleY(0.2); opacity: 0.7; }
-    40%  { transform: translate(-50%,-30%) scaleY(1.4); opacity: 1; }
-    100% { transform: translate(-50%,-80%) scaleY(2); opacity: 0; }
+/* Éclat plus intense et durable */
+@keyframes BEAM_EXPLODE {
+    0%   { transform: scaleY(0.1); opacity: 1; }
+    40%  { transform: scaleY(1.2); opacity: 1; }
+    60%  { transform: scaleY(1.6); opacity: 0.85; }
+    100% { transform: scaleY(2.4); opacity: 0; }
 }

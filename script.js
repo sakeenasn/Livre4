@@ -231,9 +231,5 @@ function toggleLumiere() {
 
     const beamWidth = 700; // largeur du faisceau
 
-    // Centre le faisceau sur particleOrigin
-    beam.style.left = `${centerX - beamWidth / 2}px`;
-    beam.style.top  = `${centerY}px`;
-
     setTimeout(() => beam.remove(), 2600);
 }

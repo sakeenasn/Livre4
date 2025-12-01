@@ -170,8 +170,6 @@ function shakeBook() {
     }
 }
 
-
-
 // BUTTON FEU
 let fireInterval = null; // pour gérer l’intervalle du feu
 
@@ -227,7 +225,7 @@ function stopFire() {
 
 
 
-// ?
+// 
 function resetBook() {
     // Fecha o livro
     isOpen = false;

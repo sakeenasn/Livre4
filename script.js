@@ -173,22 +173,61 @@ function shakeBook() {
 
 
 // BUTTON FEU
-function spawnFire() {
-    const flameBox = document.createElement("div");
-    flameBox.style.position = "absolute";
-    flameBox.style.left = "50%";
-    flameBox.style.top = "50%";
-    flameBox.style.width = "50px";
-    flameBox.style.height = "50px";
-    flameBox.style.background = "red";
-    flameBox.style.zIndex = 9999;
-    flameBox.style.transform = "translate(-50%, -50%)";
-    document.body.appendChild(flameBox);
+let fireInterval = null; // pour gérer l’intervalle du feu
+
+function toggleFire() {
+    if (!isOpen) return; // le livre doit être ouvert
+
+    // Si un feu est déjà actif, on l'arrête
+    if (fireInterval) {
+        stopFire();
+        return;
+    }
+
+    // Récupérer le centre du livre
+    const bookRect = document.getElementById('bookContainer').getBoundingClientRect();
+    const centerX = bookRect.left + bookRect.width / 2;
+    const centerY = bookRect.top + bookRect.height - 20; // bas du livre
+
+    fireInterval = setInterval(() => {
+        // Créer le conteneur de feu
+        const fire = document.createElement('div');
+        fire.classList.add('fire-container');
+        fire.style.left = `${centerX}px`;
+        fire.style.top = `${centerY}px`;
+
+        // Ajouter 2-4 flammes par conteneur
+        const flameCount = Math.floor(Math.random() * 3) + 2;
+        for (let i = 0; i < flameCount; i++) {
+            const flame = document.createElement('div');
+            flame.classList.add('fire-flame');
+            if (Math.random() > 0.5) flame.classList.add('big');
+
+            // Position horizontale aléatoire
+            flame.style.left = `${Math.random() * 20 - 10}px`;
+
+            fire.appendChild(flame);
+        }
+
+        document.body.appendChild(fire);
+
+        // Supprimer après 1,5 à 2 s
+        setTimeout(() => fire.remove(), 1800);
+    }, 200); // chaque 0.2s, nouvelles flammes apparaissent
+}
+
+// Fonction pour arrêter le feu
+function stopFire() {
+    if (fireInterval) {
+        clearInterval(fireInterval);
+        fireInterval = null;
+    }
+    document.querySelectorAll('.fire-container').forEach(f => f.remove());
 }
 
 
 
-
+// ?
 function resetBook() {
     // Fecha o livro
     isOpen = false;

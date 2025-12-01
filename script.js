@@ -85,18 +85,16 @@ function triggerMagic() {
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    // Cible la couverture avant
-    const cover = document.querySelector('.front-cover');
-
-    // Calcul du centre de la couverture
-    const rect = cover.getBoundingClientRect();
+    const center = document.querySelector('.center-point');
+    const rect = center.getBoundingClientRect();
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
 
-    const centerX = rect.left + scrollLeft + rect.width / 2;
-    const centerY = rect.top + scrollTop + rect.height / 2;
-
     const beamWidth = 700;
+
+    // centre exact du point invisible
+    const centerX = rect.left + scrollLeft;
+    const centerY = rect.top + scrollTop;
 
     beam.style.left = (centerX - beamWidth/2) + "px";
     beam.style.top  = centerY + "px";

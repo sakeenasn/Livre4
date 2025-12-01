@@ -80,18 +80,18 @@ function stopMagic() {
 }
 
 // === Faisceau calé au CENTRE du livre ===
-function triggerMagic(){
+function triggerMagic() {
     const beam = document.createElement("div");
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
     const rect = bookContainer.getBoundingClientRect();
 
-    // Centre horizontal
-    beam.style.left = (rect.left + rect.width/2 - 350) + "px"; // 350 = moitié largeur triangle
+    // largeur du faisceau = 700px, donc on décale de 350
+    const beamWidth = 700;
 
-    // Centre vertical exact du livre
-    beam.style.top  = (rect.top + rect.height/2) + "px"; 
+    beam.style.left = (rect.left + rect.width/2 - beamWidth/2) + "px";
+    beam.style.top  = (rect.top + rect.height/2) + "px"; // centre vertical exact
 
-    setTimeout(()=>beam.remove(),2600);
+    setTimeout(() => beam.remove(), 2600);
 }

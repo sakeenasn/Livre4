@@ -19,37 +19,45 @@
     <audio id="soundPage" src="page.mp3" preload="auto"></audio>
 
     <div class="controls">
-        <button id="themeBtn" onclick="toggleTheme()">✨ Changer d'ambiance</button>
-    </div>
+       
+        <button id="resetBtn" onclick="resetBook()">Réinitialiser</button>
+        <button id="themeBtn" onclick="toggleTheme()">Changer d'ambiance</button>
+        <button onclick="rainbowParticles()">Particules</button>
+        <button onclick="shakeBook()">Secouer</button>
+        <button onclick="flyPages()">Vent</button>
+        <button onclick="toggleFire()">Feu</button>
+        <button onclick="toggleLumiere()">Lumière</button>
+        <button onclick="startWriting()">Écriture</button>
+   
+        
+ </div>
+    
+    
+  <div class="book-container" id="bookContainer" onclick="toggleBook()">
+    <div id="particleOrigin"></div>
+    <div class="book">
+        <div class="page back-cover"></div>
+        <div class="spine"></div>
 
-    <div class="book-container" id="bookContainer" onclick="toggleBook()">
-        <div class="book">
-            <div class="page back-cover"></div>
-            <div class="spine"></div>
-
-            <div class="page inner-page p3">
-                <div class="page-content">
-                    <p>...et la magie opéra.</p>
-                </div>
+        <div class="page inner-page p3">
+            <div class="page-content">
+                <p>...et la magie commence.</p>
             </div>
-            <div class="page inner-page p2"></div>
-            <div class="page inner-page p1"></div>
+        </div>
+        <div class="page inner-page p2"></div>
+        <div class="page inner-page p1"></div>
 
-            <div class="page front-cover">
-    <div class="cover-content">
-        <h1>Le Grimoire</h1>
-        <div class="ornament"></div>
-    </div>
-    <!-- point central pour la lumière -->
-    <div class="center-point"></div>
-</div>
-                </div>
+        <div class="page front-cover">
+            <div class="cover-content">
+                <h1>Le Grimoire</h1>
+                <div class="ornament"></div>
             </div>
         </div>
     </div>
-    
-    <button id="magicBtn" onclick="triggerMagic()">Lumière 🕯️</button>
-    
-    <script src="script.js"></script>
+</div>
+
+
+
+<script src="script.js"></script>
 </body>
 </html>

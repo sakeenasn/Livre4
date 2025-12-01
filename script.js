@@ -3,101 +3,216 @@ const body = document.body;
 let isOpen = false;
 let particleInterval;
 let magicTimeout;
+let fireInterval = null;
+let lumiereInterval = null;
 
-// Couleurs magiques
+
+// Cores mágicas para partículas
 const colors = ['#ffd700', '#ff9a9e', '#a18cd1', '#ffffff', '#84fab0'];
 
-// 🔊 Jouer un son
+// FUNÇÃO PARA TOCAR SOM
 function playSound(audioId) {
     const audio = document.getElementById(audioId);
-    if (!audio) return;
-    audio.currentTime = 0;
-    audio.play().catch(e => console.log("Erreur audio : " + e));
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log("Erro de áudio: " + e));
+    }
 }
 
-// 🌙 Changement d’ambiance
+// Alternar tema (dark/light)
 function toggleTheme() {
     body.classList.toggle('dark-mode');
+    body.style.transition = 'background 1.5s ease, color 1.5s ease';
+    setTimeout(() => { body.style.transition = ''; }, 1600);
 }
 
-// 📖 Ouverture / fermeture du grimoire
+// Abrir/fechar livro
 function toggleBook() {
     isOpen = !isOpen;
 
     if (isOpen) {
         bookContainer.classList.add('open');
 
-        // Effet sonore des pages
-        setTimeout(()=> playSound('soundPage'), 300);
-        setTimeout(()=> playSound('soundPage'), 500);
-        setTimeout(()=> playSound('soundPage'), 700);
+        // Sons das páginas
+        const pageTurnDelay = 200;
+        setTimeout(() => playSound('soundPage'), 300);
+        setTimeout(() => playSound('soundPage'), 300 + pageTurnDelay);
+        setTimeout(() => playSound('soundPage'), 300 + 2 * pageTurnDelay);
 
-        // Lancement magie après ouverture
-        magicTimeout = setTimeout(startMagic, 2200);
+        // NÃO iniciar partículas automaticamente!
+        // magicTimeout = setTimeout(startMagic, 500); // removido
+    } else { 
+        bookContainer.classList.remove('open'); 
+        clearTimeout(magicTimeout); 
+        stopMagic(); 
+    }
+ }
+    
+// BUTTON PARTICULES
+function createParticle() {
+    if (!isOpen) return; // só cria partículas se o livro estiver aberto
 
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+
+    // tamanho aleatório
+    const size = Math.random() * 12 + 4;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+
+    // cores mágicas
+    const currentColors = body.classList.contains('dark-mode')
+        ? ['#ffffff', '#cfcfcf', '#a0a0ff', '#ffd700', '#e0e0ff']
+        : colors;
+
+    const color = currentColors[Math.floor(Math.random() * currentColors.length)];
+    particle.style.background = color;
+    particle.style.boxShadow = `0 0 ${size * 3}px ${color}`;
+
+    // posição inicial: centro da lombada
+   const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+   const startX = origin.left + origin.width / 2;
+   const startY = origin.top + origin.height / 2;
+
+
+
+
+    // trajetórias aleatórias
+    const tx = (Math.random() - 0.5) * 120;
+    const txEnd = (Math.random() - 0.5) * 700;
+    particle.style.setProperty('--tx', `${tx}px`);
+    particle.style.setProperty('--tx-end', `${txEnd}px`);
+
+    // animação
+    const duration = Math.random() * 2 + 2;
+    particle.style.animation = `floatUp ${duration}s ease-out forwards`;
+
+    // adiciona ao body
+    document.body.appendChild(particle);
+
+    // remove automaticamente após animação
+    setTimeout(() => particle.remove(), duration * 1000);
+}
+
+
+let particlesActive = false;
+
+function rainbowParticles() {
+    if (!isOpen) return; // Só funciona se o livro estiver aberto
+
+    if (!particlesActive) {
+        startMagic();
+        particlesActive = true;
     } else {
-        bookContainer.classList.remove('open');
-        clearTimeout(magicTimeout);
         stopMagic();
+        particlesActive = false;
     }
 }
 
-// ✨ Génération d'une particule
-function createParticle() {
-    if (!isOpen) return;
-    const p = document.createElement('div');
-    p.classList.add('particle');
-
-    const size = Math.random()*8 + 3;
-    p.style.width = p.style.height = size + "px";
-
-    const color = colors[Math.floor(Math.random()*colors.length)];
-    p.style.background = color;
-    p.style.boxShadow = `0 0 ${size*2}px ${color}`;
-
-    const rect = bookContainer.getBoundingClientRect();
-    p.style.left = rect.left + "px";
-    p.style.top  = (rect.top + rect.height/2 + (Math.random()*150-75)) + "px";
-
-    p.style.setProperty('--tx',  `${(Math.random()-0.5)*50}px`);
-    p.style.setProperty('--tx-end', `${(Math.random()-0.5)*400}px`);
-    p.style.animation = `floatUp ${Math.random()*2+2}s ease-out forwards`;
-
-    document.body.appendChild(p);
-    setTimeout(()=> p.remove(), 3000);
-}
-
-// 🌟 Effet magie continu
 function startMagic() {
     stopMagic();
-    for(let i=0;i<20;i++) setTimeout(createParticle,i*50);
-    particleInterval = setInterval(createParticle,50);
+    for (let i = 0; i < 100; i++) setTimeout(createParticle, i * 15);
+    particleInterval = setInterval(createParticle, 15);
 }
 
-// 🛑 Stop effets
 function stopMagic() {
-    clearInterval(particleInterval);
+    if (particleInterval) clearInterval(particleInterval);
 }
 
-// === Faisceau calé au CENTRE du livre ===
-function triggerMagic() {
-    const beam = document.createElement("div");
-    beam.classList.add("magic-beam");
-    document.body.appendChild(beam);
+// BUTTON VENT
+function flyPages() {
+    const pages = document.querySelectorAll('.page:not(.front-cover):not(.back-cover)');
 
-    // bookContainer comme référence
-    const rect = bookContainer.getBoundingClientRect();
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+    pages.forEach((page, i) => {
+        setTimeout(() => {
+            const flyingPage = page.cloneNode(true);
+            const rect = page.getBoundingClientRect();
 
-    const beamWidth = 700;
+            flyingPage.style.position = 'absolute';
+            flyingPage.style.left = `${rect.left}px`;
+            flyingPage.style.top = `${rect.top}px`;
+            flyingPage.style.width = `${rect.width}px`;
+            flyingPage.style.height = `${rect.height}px`;
+            flyingPage.style.zIndex = 1000;
+            flyingPage.style.pointerEvents = 'none';
+            flyingPage.style.transition = 'transform 4s ease-out, opacity 4s ease-out';
 
-    // centre horizontal et vertical du livre
-    const centerX = rect.left + scrollLeft + rect.width / 2;
-    const centerY = rect.top + scrollTop + rect.height / 2;
+            document.body.appendChild(flyingPage);
 
-    beam.style.left = (centerX - beamWidth / 2) + "px";
-    beam.style.top  = centerY + "px";
+            // Trajetória aleatória simulando vento
+            const endX = (Math.random() - 0.5) * window.innerWidth * 2;
+            const endY = (Math.random() - 0.5) * window.innerHeight * 2;
+            const rotateX = (Math.random() - 0.5) * 1080;
+            const rotateY = (Math.random() - 0.5) * 1080;
 
-    setTimeout(() => beam.remove(), 2600);
+            requestAnimationFrame(() => {
+                flyingPage.style.transform = `translate(${endX}px, ${endY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                flyingPage.style.opacity = 0;
+            });
+
+            setTimeout(() => flyingPage.remove(), 4000);
+        }, i * 100);
+    });
 }
+
+function shakeBook() {
+    if (!isOpen) {
+        toggleBook(); // abre o livro
+        // espera 1.2s até a animação do livro abrir
+        setTimeout(() => {
+            bookContainer.classList.add('shake');
+            setTimeout(() => bookContainer.classList.remove('shake'), 500);
+        }, 1200);
+    } else {
+        // se já estiver aberto
+        bookContainer.classList.add('shake');
+        setTimeout(() => bookContainer.classList.remove('shake'), 500);
+    }
+}
+
+
+
+// BUTTON FEU
+function spawnFire() {
+    const flameBox = document.createElement("div");
+    flameBox.style.position = "absolute";
+    flameBox.style.left = "50%";
+    flameBox.style.top = "50%";
+    flameBox.style.width = "50px";
+    flameBox.style.height = "50px";
+    flameBox.style.background = "red";
+    flameBox.style.zIndex = 9999;
+    flameBox.style.transform = "translate(-50%, -50%)";
+    document.body.appendChild(flameBox);
+}
+
+
+
+
+function resetBook() {
+    // Fecha o livro
+    isOpen = false;
+    bookContainer.classList.remove('open');
+
+    // DESATIVAR SEMPRE o dark mode
+    if (document.body.classList.contains('dark-mode')) {
+        document.body.classList.remove('dark-mode');
+    }
+
+    // Para partículas mágicas
+    if (typeof stopMagic === "function") stopMagic();
+
+    // Para fogo
+    if (typeof stopFire === "function") stopFire();
+
+    // Para Lumière
+    if (lumiereInterval) {
+        clearInterval(lumiereInterval);
+        lumiereInterval = null;
+    }
+
+    // Remove TODAS as partículas do ecrã
+    document.querySelectorAll('.particle, .fire, .lumiere-particle').forEach(el => el.remove());
+}
+
+

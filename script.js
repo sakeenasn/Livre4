@@ -87,8 +87,11 @@ function triggerMagic(){
 
     const rect = bookContainer.getBoundingClientRect();
 
-    beam.style.left = (rect.left + rect.width/2 - 350) + "px"; // centre horizontal OK
-    beam.style.top  = (rect.top + rect.height*0.55) + "px";   // centre vertical du livre (réglé pour ton visuel)
+    // Centre horizontal
+    beam.style.left = (rect.left + rect.width/2 - 350) + "px"; // 350 = moitié largeur triangle
+
+    // Centre vertical exact du livre
+    beam.style.top  = (rect.top + rect.height/2) + "px"; 
 
     setTimeout(()=>beam.remove(),2600);
 }

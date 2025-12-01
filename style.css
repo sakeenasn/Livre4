@@ -202,9 +202,8 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 
 #magicBtn {
     position: absolute;
+    right: 40px;   /* Bouton à droite */
     bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 1.2em;
     padding: 15px 30px;
     border-radius: 40px;
@@ -215,32 +214,33 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     transition: 0.4s;
     backdrop-filter: blur(5px);
 }
-
 #magicBtn:hover {
-    transform: translateX(-50%) scale(1.1);
+    transform: scale(1.1);
     background: gold;
     color: black;
 }
-
-/* Effet HALO qui sort du livre */
-.magic-halo {
+/* FAISCEAU DE LUMIÈRE */
+.magic-beam {
     position: absolute;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    pointer-events: none;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -60%);
-    background: radial-gradient(circle, rgba(255,255,200,1), rgba(255,255,200,0));
+    transform: translate(-50%, -20%);
+    width: 80px;
+    height: 300px;
+    background: radial-gradient(circle at center,
+        rgba(255,255,200,0.9),
+        rgba(255,255,200,0.4) 40%,
+        rgba(255,255,200,0.0) 100%
+    );
+    filter: blur(8px);
     opacity: 0;
-    animation: haloBurst 2s ease-out forwards;
-    box-shadow: 0 0 60px gold;
+    animation: beamRise 2.2s ease-out forwards;
+    pointer-events: none;
     z-index: 999;
 }
 
-@keyframes haloBurst {
-    0%   { transform: translate(-50%, -60%) scale(0.3); opacity: 0.8; }
-    60%  { transform: translate(-50%, -100%) scale(2); opacity: 1; }
-    100% { transform: translate(-50%, -120%) scale(3.2); opacity: 0; }
+@keyframes beamRise {
+    0%   { transform: translate(-50%,100%) scaleY(0.2); opacity: 0.7; }
+    40%  { transform: translate(-50%,-30%) scaleY(1.4); opacity: 1; }
+    100% { transform: translate(-50%,-80%) scaleY(2); opacity: 0; }
 }

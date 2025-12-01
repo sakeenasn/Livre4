@@ -79,12 +79,16 @@ function stopMagic() {
     clearInterval(particleInterval);
 }
 
-// 🚀 Effet HALO lumineux déclenché par le bouton
-function triggerMagic() {
-    const halo = document.createElement("div");
-    halo.classList.add("magic-halo");
-    document.body.appendChild(halo);
+// === Faisceau calé au CENTRE du livre ===
+function triggerMagic(){
+    const beam = document.createElement("div");
+    beam.classList.add("magic-beam");
+    document.body.appendChild(beam);
 
-    setTimeout(()=> halo.remove(),2000);
-    startMagic();      // particules déjà configurées 🔥
+    const rect = bookContainer.getBoundingClientRect();
+
+    beam.style.left = (rect.left + rect.width/2 - 350) + "px"; // centre horizontal OK
+    beam.style.top  = (rect.top + rect.height*0.55) + "px";   // centre vertical du livre (réglé pour ton visuel)
+
+    setTimeout(()=>beam.remove(),2600);
 }

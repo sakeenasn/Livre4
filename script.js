@@ -82,12 +82,20 @@ function stopMagic() {
 // 🚀 Effet faisceau lumineux déclenché par le bouton
     function triggerMagic() {
 
-    // Faisceau
     const beam = document.createElement("div");
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
-    setTimeout(()=> beam.remove(), 2200);
 
-    // Particules déjà existantes
+    // On récupère la position du livre
+    const rect = bookContainer.getBoundingClientRect();
+
+    // Centre exact du livre ✨
+    beam.style.left = (rect.left + rect.width/2 - 70) + "px";  // 70 = moitié de la largeur du rayon
+    beam.style.top  = (rect.top + rect.height/2 - 40) + "px"; // Ajuste si tu veux plus haut/bas
+
+    // Retrait du rayon après explosion
+    setTimeout(()=> beam.remove(), 2900);
+
+    // Particules magiques déjà dans ton code
     startMagic();
 }

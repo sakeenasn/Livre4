@@ -85,13 +85,15 @@ function triggerMagic() {
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    const rect = bookContainer.getBoundingClientRect();
+    // On cible la couverture avant (la page visible)
+    const cover = document.querySelector('.front-cover');
+    const rect = cover.getBoundingClientRect();
 
-    // largeur du faisceau = 700px, donc on décale de 350
     const beamWidth = 700;
 
+    // Centre horizontal et vertical exact de la couverture
     beam.style.left = (rect.left + rect.width/2 - beamWidth/2) + "px";
-    beam.style.top  = (rect.top + rect.height/2) + "px"; // centre vertical exact
+    beam.style.top  = (rect.top + rect.height/2) + "px";
 
     setTimeout(() => beam.remove(), 2600);
 }

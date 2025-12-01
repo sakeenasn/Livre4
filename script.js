@@ -79,19 +79,21 @@ function stopMagic() {
     clearInterval(particleInterval);
 }
 
-// 🚀 Effet faisceau lumineux déclenché par le bouton
-    function triggerMagic() {
+// 🚀 Effet faisceau lumineux déclenché par le bouton 
+function triggerMagic() {
 
     const beam = document.createElement("div");
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    // Position exacte du livre
     const rect = bookContainer.getBoundingClientRect();
 
-    // Position pile au centre du livre, à sa reliure intérieure
-    beam.style.left = (rect.left + rect.width / 2 - 300) + "px";   // alignement horizontal parfait
-    beam.style.top = (rect.top + rect.height * 0.65) + "px";        // 0.65 = centre bas du livre
+    // 📍POSITION EXACTE DU CENTRE DU LIVRE (point de magie parfait)
+    const beamX = rect.left + rect.width * 0.30;  // centre intérieur — pas la couverture
+    const beamY = rect.top + rect.height * 0.52;  // milieu vertical des pages ouvertes
+
+    beam.style.left = beamX + "px";
+    beam.style.top = beamY + "px";
 
     setTimeout(()=> beam.remove(), 2800);
 

@@ -222,18 +222,18 @@ function toggleLumiere() {
 
     const beam = document.createElement('div');
     beam.classList.add('magic-beam');
-
     document.body.appendChild(beam);
 
-    // Récupère la position du centre du particleOrigin
+    // Récupère la position exacte de particleOrigin (centre du livre ouvert)
     const origin = document.getElementById('particleOrigin').getBoundingClientRect();
     const centerX = origin.left + origin.width / 2;
     const centerY = origin.top + origin.height / 2;
 
-    // Positionne le faisceau exactement au même centre
+    // Position absolue du faisceau par rapport à la fenêtre
+    beam.style.position = 'absolute';
     beam.style.left = centerX + 'px';
     beam.style.top  = centerY + 'px';
 
-    // Supprime le faisceau après l'animation
+    // Supprime après l'animation
     setTimeout(() => beam.remove(), 2600);
 }

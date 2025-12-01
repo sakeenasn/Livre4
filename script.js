@@ -104,7 +104,23 @@ function createParticle() {
     }, duration * 1000);
 }
 
-function startMagic() {
+function startMagic(
+    function triggerMagic() {
+
+    // Crée le halo
+    const halo = document.createElement("div");
+    halo.classList.add("magic-halo");
+    document.body.appendChild(halo);
+
+    setTimeout(()=> halo.remove(), 2000);
+
+    // On lance aussi les particules déjà existantes
+    startMagic();
+
+    // Son si tu veux
+    // playSound("soundMagic");
+}
+) {
     stopMagic();
     
     // Si vous avez un son pour la magie

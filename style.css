@@ -201,49 +201,25 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 }
 
 /*bouton faiseau de lumiere*/
-#magicBtn {
-    position: absolute;
-    top: 25px;      /* ⬆ AU LIEU DE BOTTOM */
-    right: 25px;    /* ➡ */
-    font-size: 1.2em;
-    padding: 15px 30px;
-    border-radius: 40px;
-    border: 2px solid gold;
-    background: rgba(255,255,255,0.15);
-    color: gold;
-    cursor: pointer;
-    transition: 0.4s;
-    backdrop-filter: blur(5px);
-}
-#magicBtn:hover {
-    transform: scale(1.12);
-    background: gold;
-    color: black;
-}
-/* FAISCEAU ULTRA LUMINEUX */
 .magic-beam {
     position: absolute;
-    width: 140px;          /* + Large + visible */
-    height: 500px;         /* + Haut */
-    pointer-events: none;
-    z-index: 9999;
-
-    background: linear-gradient(
-        rgba(255,255,200,0.95),
-        rgba(255,255,200,0.6),
-        rgba(255,255,200,0.05)
-    );
-
-    filter: blur(6px) saturate(2) brightness(2.2);
+    width: 0;
+    height: 0;
+    border-left: 300px solid transparent;   /* Largeur gauche du faisceau */
+    border-right: 300px solid transparent;  /* Largeur droite du faisceau */
+    border-bottom: 500px solid rgba(255,255,200,0.9); /* Rayon lumineux */
+    
+    filter: blur(15px) brightness(1.8) saturate(1.4);
     opacity: 0;
-    transform-origin: center bottom;
-    animation: BEAM_EXPLODE 2.8s ease-out forwards;
+    transform-origin: bottom center;
+    animation: BEAM_UPWARD 2.6s ease-out forwards;
+    pointer-events: none;
+    z-index: 999999;
 }
 
-/* Éclat plus intense et durable */
-@keyframes BEAM_EXPLODE {
+/* Faisceau qui monte + ouverture 180° */
+@keyframes BEAM_UPWARD {
     0%   { transform: scaleY(0.1); opacity: 1; }
-    40%  { transform: scaleY(1.2); opacity: 1; }
-    60%  { transform: scaleY(1.6); opacity: 0.85; }
-    100% { transform: scaleY(2.4); opacity: 0; }
+    50%  { transform: scaleY(1.2); opacity: 1; }
+    100% { transform: scaleY(2.3); opacity: 0; }
 }

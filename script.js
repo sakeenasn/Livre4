@@ -223,14 +223,16 @@ function toggleLumiere() {
     const beam = document.createElement('div');
     beam.classList.add('magic-beam');
 
-    // On ajoute le faisceau DANS le book-container
-    bookContainer.appendChild(beam);
+    document.body.appendChild(beam);
 
-    // On centre le faisceau par rapport au bookContainer
-    beam.style.position = 'absolute';
-    beam.style.left = '50%';
-    beam.style.top = '50%';
-    beam.style.transform = 'translate(-50%, -50%)';
+    // Récupère la position du centre du particleOrigin
+    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+    const centerX = origin.left + origin.width / 2;
+    const centerY = origin.top + origin.height / 2;
+
+    // Positionne le faisceau exactement au même centre
+    beam.style.left = centerX + 'px';
+    beam.style.top  = centerY + 'px';
 
     // Supprime le faisceau après l'animation
     setTimeout(() => beam.remove(), 2600);

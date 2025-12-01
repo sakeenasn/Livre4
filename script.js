@@ -79,12 +79,15 @@ function stopMagic() {
     clearInterval(particleInterval);
 }
 
-// 🚀 Effet HALO lumineux déclenché par le bouton
-function triggerMagic() {
-    const halo = document.createElement("div");
-    halo.classList.add("magic-halo");
-    document.body.appendChild(halo);
+// 🚀 Effet faisceau lumineux déclenché par le bouton
+    function triggerMagic() {
 
-    setTimeout(()=> halo.remove(),2000);
-    startMagic();      // particules déjà configurées 🔥
+    // Faisceau
+    const beam = document.createElement("div");
+    beam.classList.add("magic-beam");
+    document.body.appendChild(beam);
+    setTimeout(()=> beam.remove(), 2200);
+
+    // Particules déjà existantes
+    startMagic();
 }

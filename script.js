@@ -218,28 +218,24 @@ function resetBook() {
 
 //button lumiere
 function toggleLumiere() {
-    if (lumiereInterval) {
-        // arrêter le faisceau si déjà actif
-        clearInterval(lumiereInterval);
-        lumiereInterval = null;
-        document.querySelectorAll('.lumiere-beam').forEach(b => b.remove());
-        return;
-    }
+    // On crée un faisceau unique à chaque clic
+    const origin = document.getElementById('particleOrigin');
+    const rect = origin.getBoundingClientRect();
 
-        // positionner exactement au centre de #particleOrigin
-        const origin = document.getElementById('particleOrigin');
-        const rect = origin.getBoundingClientRect();
+    // Calcul du centre exact du #particleOrigin
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
-        // ici on tient compte du translate(-50%, -50%)
-        const x = rect.left + rect.width / 2;
-        const y = rect.top + rect.height / 2;
+    const beam = document.createElement('div');
+    beam.classList.add('lumiere-beam');
 
-        beam.style.left = `${x - 350}px`; // 350 = moitié largeur faisceau
-        beam.style.top  = `${y}px`;
+    // On positionne le faisceau
+    // largeur du faisceau = 700px, donc on décale de 350 pour centrer
+    beam.style.left = `${centerX - 350}px`;
+    beam.style.top = `${centerY}px`;
 
-        document.body.appendChild(beam);
+    document.body.appendChild(beam);
 
-        // supprimer après animation
-        setTimeout(() => beam.remove(), 2600);
-    }, 800);
+    // On supprime le faisceau après son animation
+    setTimeout(() => beam.remove(), 2600);
 }

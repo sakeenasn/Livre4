@@ -348,19 +348,6 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     z-index: 9999;
 }
 
-.lumiere-beam {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 350px solid transparent;
-    border-right: 350px solid transparent;
-    border-top: 600px solid rgba(255,255,220,0.9);
-    filter: blur(22px) brightness(2.5);
-    transform-origin: center bottom;
-    animation: beamExpand 2.5s ease-out forwards;
-    z-index: 9999;
-}
-
 @keyframes beamExpand {
     0%   { opacity: 0.9; transform: scale(0.2); }
     60%  { opacity: 1;   transform: scale(1.3); }

@@ -202,10 +202,10 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 
 /*bouton lumiere*/
 #magicBtn {
-    position: absolute;
-    top: 30px;          /* avant bottom: 40px */
-    right: 30px;        /* placer à droite */
-    transform: none;    /* plus besoin de translateX */
+    position: fixed;   /* fixed au lieu de absolute pour rester visible */
+    top: 30px;
+    right: 30px;
+    transform: none;   /* pas de translateX */
     font-size: 1.2em;
     padding: 15px 30px;
     border-radius: 40px;
@@ -215,6 +215,7 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     cursor: pointer;
     transition: 0.4s;
     backdrop-filter: blur(5px);
+    z-index: 1000;     /* toujours au-dessus du livre */
 }
 
 #magicBtn:hover {

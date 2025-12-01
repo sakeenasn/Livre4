@@ -85,15 +85,21 @@ function triggerMagic() {
     beam.classList.add("magic-beam");
     document.body.appendChild(beam);
 
-    // On cible la couverture avant (la page visible)
+    // Cible la couverture avant
     const cover = document.querySelector('.front-cover');
+
+    // Calcul du centre de la couverture
     const rect = cover.getBoundingClientRect();
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+
+    const centerX = rect.left + scrollLeft + rect.width / 2;
+    const centerY = rect.top + scrollTop + rect.height / 2;
 
     const beamWidth = 700;
 
-    // Centre horizontal et vertical exact de la couverture
-    beam.style.left = (rect.left + rect.width/2 - beamWidth/2) + "px";
-    beam.style.top  = (rect.top + rect.height/2) + "px";
+    beam.style.left = (centerX - beamWidth/2) + "px";
+    beam.style.top  = centerY + "px";
 
     setTimeout(() => beam.remove(), 2600);
 }

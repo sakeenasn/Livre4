@@ -273,74 +273,52 @@ function resetBook() {
 
 // fogo
 
-let fireActive = false;
-let fireBox = null;
-let sparkLoop = null;
+let fireContainer, sparkTimer, fireLight;
+let fireVisible = false;
 
 function toggleFire() {
     if (!isOpen) return;
 
-    if (fireActive) {
-        stopFire();
-    } else {
-        startFire();
-    }
-    fireActive = !fireActive;
+    if (fireVisible) stopFire();
+    else startFire();
+
+    fireVisible = !fireVisible;
 }
 
 function startFire() {
     stopFire();
 
-    fireBox = document.createElement("div");
-    fireBox.classList.add("fire-container");
+    fireContainer = document.createElement("div");
+    fireContainer.classList.add("fire-container");
+    fireContainer.innerHTML = `
+        <div class="flame"></div>
+        <div class="flame small"></div>
+        <div class="flame small2"></div>
+        <div class="smoke"></div>
+    `;
+    document.body.appendChild(fireContainer);
 
-    // Flammes principales et secondaires
-    const f1 = document.createElement("div");
-    f1.classList.add("flame");
+    // lumière dynamique
+    fireLight = document.createElement("div");
+    fireLight.classList.add("fire-light");
+    document.body.appendChild(fireLight);
 
-    const f2 = document.createElement("div");
-    f2.classList.add("flame", "small");
-
-    const f3 = document.createElement("div");
-    f3.classList.add("flame", "small2");
-
-    // Fumée
-    const smoke = document.createElement("div");
-    smoke.classList.add("smoke");
-
-    fireBox.appendChild(f1);
-    fireBox.appendChild(f2);
-    fireBox.appendChild(f3);
-    fireBox.appendChild(smoke);
-
-    document.body.appendChild(fireBox);
-
-    // Étincelles en continu
-    sparkLoop = setInterval(spawnSpark, 90);
+    // étincelles aléatoires
+    sparkTimer = setInterval(() => {
+        const spark = document.createElement("div");
+        spark.classList.add("spark");
+        spark.style.left = (50 + (Math.random()*20 - 10)) + "%";
+        spark.style.bottom = "50px";
+        document.body.appendChild(spark);
+        setTimeout(() => spark.remove(), 1200);
+    }, 100);
 }
 
 function stopFire() {
-    if (fireBox) {
-        fireBox.remove();
-        fireBox = null;
-    }
-    if (sparkLoop) {
-        clearInterval(sparkLoop);
-        sparkLoop = null;
-    }
+    if (fireContainer) fireContainer.remove();
+    if (fireLight) fireLight.remove();
+    fireContainer = null;
+    fireLight = null;
+    if (sparkTimer) clearInterval(sparkTimer);
+    sparkTimer = null;
 }
-
-function spawnSpark() {
-    if (!fireBox) return;
-
-    const s = document.createElement("div");
-    s.classList.add("spark");
-
-    s.style.left = (50 + (Math.random() * 20 - 10)) + "%";
-    s.style.bottom = "40px";
-
-    fireBox.appendChild(s);
-
-    setTimeout(() => s.remove(), 1200);
-}
-

@@ -269,32 +269,28 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 }
 
 /* ===== FEU ===== */
+
 .fire-container {
     position: absolute;
     left: 50%;
-    top: 60%;
-    transform: translate(-50%, -50%);
-    width: 250px;
-    height: 350px;
+    top: 50%;
+    transform: translate(-50%, -30%); /* légèrement au-dessus du centre du livre */
+    width: 200px;
+    height: 250px;
     pointer-events: none;
     z-index: 9999;
 }
 
-/* FLAMMES INDIVIDUELLES */
+/* Flammes individuelles */
 .flame {
     position: absolute;
     bottom: 0;
     left: 50%;
     width: 120px;
-    height: 220px;
+    height: 200px;
     transform: translateX(-50%);
     border-radius: 50% 50% 20% 20%;
-    background: radial-gradient(circle at 50% 20%,
-        #fff9c4 0%,
-        #ffd54f 40%,
-        #ff6f00 70%,
-        #d84315 90%
-    );
+    background: radial-gradient(circle at 50% 20%, #fff9c4 0%, #ffd54f 40%, #ff6f00 70%, #d84315 90%);
     filter: blur(12px);
     animation: flameFlicker 0.7s infinite alternate ease-in-out;
     opacity: 0.95;
@@ -314,58 +310,20 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     animation: flameFlicker 0.8s infinite alternate ease-in-out;
 }
 
-/* ANIMATION FLAMMES */
 @keyframes flameFlicker {
     0%   { transform: translateX(-50%) scale(1,1); opacity: 0.8; }
     50%  { transform: translateX(-48%) scale(1.2,1.1); opacity: 0.9; }
     100% { transform: translateX(-52%) scale(1.4,1.3) translateY(-20px); opacity: 1; }
 }
 
-/* FUMÉE */
-.smoke {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(150,150,150,0.15);
-    filter: blur(20px);
-    transform: translateX(-50%);
-    animation: smokeRise 3s linear infinite;
-}
-
-@keyframes smokeRise {
-    0%   { transform: translate(-50%,0) scale(1); opacity: 0.3; }
-    50%  { transform: translate(-50%,-50px) scale(1.5); opacity: 0.2; }
-    100% { transform: translate(-50%,-120px) scale(2.2); opacity: 0; }
-}
-
-/* ÉTINCELLES */
-.spark {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: #ffe066;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ffd700;
-    animation: sparkRise 1.2s linear forwards;
-}
-
-@keyframes sparkRise {
-    0%   { transform: translate(0,0) scale(1); opacity: 1; }
-    50%  { transform: translate(20px,-80px) scale(0.6); opacity: 0.8; }
-    100% { transform: translate(50px,-200px) scale(0.2); opacity: 0; }
-}
-
-/* LUMIÈRE DYNAMIQUE */
+/* Lumière dynamique autour du feu */
 .fire-light {
     position: absolute;
-    width: 350px;
-    height: 350px;
+    width: 300px;
+    height: 300px;
     left: 50%;
-    top: 60%;
-    transform: translate(-50%, -50%);
+    top: 50%;
+    transform: translate(-50%, -30%);
     background: radial-gradient(circle, rgba(255,180,50,0.4) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
@@ -374,7 +332,20 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 }
 
 @keyframes lightFlicker {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
-    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.5; }
-    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.45; }
+    0% { transform: translate(-50%, -30%) scale(1); opacity: 0.4; }
+    50% { transform: translate(-50%, -30%) scale(1.05); opacity: 0.5; }
+    100% { transform: translate(-50%, -30%) scale(1.1); opacity: 0.45; }
+}
+
+/* Étincelles réalistes */
+.spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ffd54f;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1000;
 }

@@ -271,7 +271,7 @@ function resetBook() {
  }
 
 
-// fuego
+// fogo
 
 let fireActive = false;
 let fireBox = null;

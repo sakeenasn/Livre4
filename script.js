@@ -271,71 +271,75 @@ function resetBook() {
  }
 
 
-// fogo
+// fuego
 
-let fireContainer, fireLight, sparkTimer;
-let fireVisible = false;
+let fireActive = false;
+let fireBox = null;
+let sparkLoop = null;
 
 function toggleFire() {
     if (!isOpen) return;
 
-    if (fireVisible) stopFire();
-    else startFire();
-
-    fireVisible = !fireVisible;
+    if (fireActive) {
+        stopFire();
+    } else {
+        startFire();
+    }
+    fireActive = !fireActive;
 }
 
 function startFire() {
     stopFire();
 
-    // Container des flammes
-    fireContainer = document.createElement("div");
-    fireContainer.classList.add("fire-container");
-    fireContainer.innerHTML = `
-        <div class="flame"></div>
-        <div class="flame small"></div>
-        <div class="flame small2"></div>
-    `;
-    document.body.appendChild(fireContainer);
+    fireBox = document.createElement("div");
+    fireBox.classList.add("fire-container");
 
-    // Lumière dynamique
-    fireLight = document.createElement("div");
-    fireLight.classList.add("fire-light");
-    document.body.appendChild(fireLight);
+    // Flammes principales et secondaires
+    const f1 = document.createElement("div");
+    f1.classList.add("flame");
 
-    // Étincelles réalistes
-    sparkTimer = setInterval(() => {
-        const spark = document.createElement("div");
-        spark.classList.add("spark");
+    const f2 = document.createElement("div");
+    f2.classList.add("flame", "small");
 
-        // Position initiale au centre du feu
-        const rect = fireContainer.getBoundingClientRect();
-        spark.style.left = rect.left + rect.width/2 + (Math.random()*40 - 20) + "px";
-        spark.style.top = rect.top + rect.height/2 + "px";
+    const f3 = document.createElement("div");
+    f3.classList.add("flame", "small2");
 
-        // Trajectoire aléatoire
-        const deltaX = (Math.random() - 0.5) * 200;
-        const deltaY = - (Math.random() * 200 + 50);
-        const duration = 800 + Math.random() * 700;
+    // Fumée
+    const smoke = document.createElement("div");
+    smoke.classList.add("smoke");
 
-        spark.style.transition = `transform ${duration}ms ease-out, opacity ${duration}ms ease-out`;
-        document.body.appendChild(spark);
+    fireBox.appendChild(f1);
+    fireBox.appendChild(f2);
+    fireBox.appendChild(f3);
+    fireBox.appendChild(smoke);
 
-        // animation avec requestAnimationFrame pour naturalité
-        requestAnimationFrame(() => {
-            spark.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.3)`;
-            spark.style.opacity = 0;
-        });
+    document.body.appendChild(fireBox);
 
-        setTimeout(() => spark.remove(), duration);
-    }, 150);
+    // Étincelles en continu
+    sparkLoop = setInterval(spawnSpark, 90);
 }
 
 function stopFire() {
-    if (fireContainer) fireContainer.remove();
-    if (fireLight) fireLight.remove();
-    fireContainer = null;
-    fireLight = null;
-    if (sparkTimer) clearInterval(sparkTimer);
-    sparkTimer = null;
+    if (fireBox) {
+        fireBox.remove();
+        fireBox = null;
+    }
+    if (sparkLoop) {
+        clearInterval(sparkLoop);
+        sparkLoop = null;
+    }
+}
+
+function spawnSpark() {
+    if (!fireBox) return;
+
+    const s = document.createElement("div");
+    s.classList.add("spark");
+
+    s.style.left = (50 + (Math.random() * 20 - 10)) + "%";
+    s.style.bottom = "40px";
+
+    fireBox.appendChild(s);
+
+    setTimeout(() => s.remove(), 1200);
 }

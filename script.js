@@ -45,6 +45,7 @@ function toggleBook() {
         bookContainer.classList.remove('open'); 
         clearTimeout(magicTimeout); 
         stopMagic(); 
+        stopLumiere();
     }
  }
     
@@ -153,8 +154,12 @@ function flyPages() {
             setTimeout(() => flyingPage.remove(), 4000);
         }, i * 100);
     });
+
+    
 }
 
+
+// BUTTON SECOUER
 function shakeBook() {
     if (!isOpen) {
         toggleBook(); // abre o livro
@@ -170,62 +175,77 @@ function shakeBook() {
     }
 }
 
+
+
 // BUTTON FEU
-let fireInterval = null; // pour gérer l’intervalle du feu
-
-function toggleFire() {
-    if (!isOpen) return; // le livre doit être ouvert
-
-    // Si un feu est déjà actif, on l'arrête
-    if (fireInterval) {
-        stopFire();
-        return;
-    }
-
-    // Récupérer le centre du livre
-    const bookRect = document.getElementById('bookContainer').getBoundingClientRect();
-    const centerX = bookRect.left + bookRect.width / 2;
-    const centerY = bookRect.top + bookRect.height - 20; // bas du livre
-
-    fireInterval = setInterval(() => {
-        // Créer le conteneur de feu
-        const fire = document.createElement('div');
-        fire.classList.add('fire-container');
-        fire.style.left = `${centerX}px`;
-        fire.style.top = `${centerY}px`;
-
-        // Ajouter 2-4 flammes par conteneur
-        const flameCount = Math.floor(Math.random() * 3) + 2;
-        for (let i = 0; i < flameCount; i++) {
-            const flame = document.createElement('div');
-            flame.classList.add('fire-flame');
-            if (Math.random() > 0.5) flame.classList.add('big');
-
-            // Position horizontale aléatoire
-            flame.style.left = `${Math.random() * 20 - 10}px`;
-
-            fire.appendChild(flame);
-        }
-
-        document.body.appendChild(fire);
-
-        // Supprimer après 1,5 à 2 s
-        setTimeout(() => fire.remove(), 1800);
-    }, 200); // chaque 0.2s, nouvelles flammes apparaissent
-}
-
-// Fonction pour arrêter le feu
-function stopFire() {
-    if (fireInterval) {
-        clearInterval(fireInterval);
-        fireInterval = null;
-    }
-    document.querySelectorAll('.fire-container').forEach(f => f.remove());
+function spawnFire() {
+    const flameBox = document.createElement("div");
+    flameBox.style.position = "absolute";
+    flameBox.style.left = "50%";
+    flameBox.style.top = "50%";
+    flameBox.style.width = "50px";
+    flameBox.style.height = "50px";
+    flameBox.style.background = "red";
+    flameBox.style.zIndex = 9999;
+    flameBox.style.transform = "translate(-50%, -50%)";
+    document.body.appendChild(flameBox);
 }
 
 
 
-// 
+// BUTTON LUMIERE
+function createLumiere() {
+    if (!isOpen) return; // só cria feixe se o livro estiver aberto
+
+    const beam = document.createElement('div');
+    beam.classList.add('magic-beam');
+
+    // posição inicial: centro do lumiereOrigin
+    const origin = document.getElementById('lumiereOrigin').getBoundingClientRect();
+    const startX = origin.left + origin.width / 2;
+    const startY = origin.top + origin.height / 2;
+
+    // posiciona o feixe
+    beam.style.left = `${startX}px`;
+    beam.style.top = `${startY}px`;
+    beam.style.transform = 'translateX(-80%)';
+
+    // adiciona ao body
+    document.body.appendChild(beam);
+
+    // remove automaticamente após animação
+    setTimeout(() => beam.remove(), 2600);
+}
+
+let lumiereActive = false;
+
+function toggleLumiere() {
+    if (!isOpen) return;
+
+    if (!lumiereActive) {
+        startLumiere();
+        lumiereActive = true;
+    } else {
+        stopLumiere();
+        lumiereActive = false;
+    }
+}
+
+function startLumiere() {
+    stopLumiere();
+    for (let i = 0; i < 100; i++) setTimeout(createLumiere, i * 100); // rajadas iniciais
+    lumiereInterval = setInterval(createLumiere, 300); // feixe contínuo
+}
+
+function stopLumiere() {
+    if (lumiereInterval) clearInterval(lumiereInterval);
+}
+
+
+
+
+
+
 function resetBook() {
     // Fecha o livro
     isOpen = false;
@@ -243,37 +263,11 @@ function resetBook() {
     if (typeof stopFire === "function") stopFire();
 
     // Para Lumière
-    if (lumiereInterval) {
-        clearInterval(lumiereInterval);
-        lumiereInterval = null;
-    }
+    if (typeof stopLumiere === "function") stopLumiere();
+    
 
     // Remove TODAS as partículas do ecrã
-    document.querySelectorAll('.particle, .fire, .lumiere-particle').forEach(el => el.remove());
-}
+    document.querySelectorAll('.particle, .fire, .magic.beam').forEach(el => el.remove());   
+ }
 
 
-//button lumiere
-function toggleLumiere() {
-    if (!isOpen) return; // ne fonctionne que si le livre est ouvert
-
-    // Récupérer le rectangle du livre
-    const bookRect = document.getElementById('bookContainer').getBoundingClientRect();
-
-    // Calculer le centre exact du livre
-    const centerX = bookRect.left + bookRect.width / 2;
-    const centerY = bookRect.top + bookRect.height / 2;
-
-    // Créer le faisceau lumineux
-    const beam = document.createElement('div');
-    beam.classList.add('magic-beam');
-
-    // Positionner au centre du livre
-    beam.style.left = `${centerX}px`;
-    beam.style.top = `${centerY}px`;
-
-    document.body.appendChild(beam);
-
-    // Supprimer après l'animation
-    setTimeout(() => beam.remove(), 2600);
-}

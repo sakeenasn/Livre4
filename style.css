@@ -268,19 +268,19 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     100% { opacity: 0;   transform: scale(2); }
 }
 
-/* ===== FEU RÉALISTE ===== */
+/* ===== FEU ===== */
 .fire-container {
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -40%);
-    width: 220px;
-    height: 320px;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 350px;
     pointer-events: none;
     z-index: 9999;
 }
 
-/* FLAMMES PRINCIPALES */
+/* FLAMMES INDIVIDUELLES */
 .flame {
     position: absolute;
     bottom: 0;
@@ -290,36 +290,27 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     transform: translateX(-50%);
     border-radius: 50% 50% 20% 20%;
     background: radial-gradient(circle at 50% 20%,
-        #fff9c4 0%,  /* cœur blanc-jaune */
-        #ffd54f 40%, /* jaune */
-        #ff6f00 70%, /* orange */
-        #d84315 90%  /* rouge sombre */
+        #fff9c4 0%,
+        #ffd54f 40%,
+        #ff6f00 70%,
+        #d84315 90%
     );
     filter: blur(12px);
     animation: flameFlicker 0.7s infinite alternate ease-in-out;
     opacity: 0.95;
 }
 
-/* FLAMMES SECONDAIRES */
-.flame.small, .flame.small2 {
-    position: absolute;
-    bottom: 0;
-    border-radius: 50% 50% 20% 20%;
-    filter: blur(10px);
-    opacity: 0.8;
-}
-
 .flame.small {
-    left: 30%;
     width: 90px;
     height: 170px;
+    left: 30%;
     animation: flameFlicker 0.6s infinite alternate ease-in-out;
 }
 
 .flame.small2 {
-    left: 70%;
     width: 100px;
     height: 190px;
+    left: 70%;
     animation: flameFlicker 0.8s infinite alternate ease-in-out;
 }
 
@@ -365,4 +356,25 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     0%   { transform: translate(0,0) scale(1); opacity: 1; }
     50%  { transform: translate(20px,-80px) scale(0.6); opacity: 0.8; }
     100% { transform: translate(50px,-200px) scale(0.2); opacity: 0; }
+}
+
+/* LUMIÈRE DYNAMIQUE */
+.fire-light {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,180,50,0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 998;
+    animation: lightFlicker 0.6s infinite alternate;
+}
+
+@keyframes lightFlicker {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.45; }
 }

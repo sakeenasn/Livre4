@@ -273,7 +273,7 @@ function resetBook() {
 
 // fogo
 
-let fireContainer, sparkTimer, fireLight;
+let fireContainer, fireLight, sparkTimer;
 let fireVisible = false;
 
 function toggleFire() {
@@ -288,30 +288,47 @@ function toggleFire() {
 function startFire() {
     stopFire();
 
+    // Container des flammes
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
     fireContainer.innerHTML = `
         <div class="flame"></div>
         <div class="flame small"></div>
         <div class="flame small2"></div>
-        <div class="smoke"></div>
     `;
     document.body.appendChild(fireContainer);
 
-    // lumière dynamique
+    // Lumière dynamique
     fireLight = document.createElement("div");
     fireLight.classList.add("fire-light");
     document.body.appendChild(fireLight);
 
-    // étincelles aléatoires
+    // Étincelles réalistes
     sparkTimer = setInterval(() => {
         const spark = document.createElement("div");
         spark.classList.add("spark");
-        spark.style.left = (50 + (Math.random()*20 - 10)) + "%";
-        spark.style.bottom = "50px";
+
+        // Position initiale au centre du feu
+        const rect = fireContainer.getBoundingClientRect();
+        spark.style.left = rect.left + rect.width/2 + (Math.random()*40 - 20) + "px";
+        spark.style.top = rect.top + rect.height/2 + "px";
+
+        // Trajectoire aléatoire
+        const deltaX = (Math.random() - 0.5) * 200;
+        const deltaY = - (Math.random() * 200 + 50);
+        const duration = 800 + Math.random() * 700;
+
+        spark.style.transition = `transform ${duration}ms ease-out, opacity ${duration}ms ease-out`;
         document.body.appendChild(spark);
-        setTimeout(() => spark.remove(), 1200);
-    }, 100);
+
+        // animation avec requestAnimationFrame pour naturalité
+        requestAnimationFrame(() => {
+            spark.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.3)`;
+            spark.style.opacity = 0;
+        });
+
+        setTimeout(() => spark.remove(), duration);
+    }, 150);
 }
 
 function stopFire() {

@@ -384,7 +384,7 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 .fire-flame-center {
     width: 120px;
     height: 180px;
-    left: 50%;
+    left: 0%;
     opacity: 0.9;
     transform: translateX(-50%);
     animation-duration: 1s;

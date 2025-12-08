@@ -276,7 +276,7 @@ let fireContainer = null;
 let sparkInterval = null;
 
 function toggleFire() {
-    if (!isOpen) return; // feu seulement livre ouvert
+    if (!isOpen) return; // Feu seulement si le livre est ouvert
 
     if (!fireActive) {
         startFire();
@@ -288,26 +288,42 @@ function toggleFire() {
 }
 
 function startFire() {
-    stopFire(); // sécurité
+    stopFire(); // sécurité pour ne pas créer deux containers
 
+    // Créer container principal
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
-    fireContainer = null;
 
-    // Plusieurs flammes pour un effet réaliste
-    for (let i = 0; i < 3; i++) {
-        const flame = document.createElement("div");
-        flame.classList.add("fire-flame");
-        flame.style.animationDelay = `${i * 0.15}s`;
-        flame.style.width = 25 + i * 10 + "px";
-        flame.style.height = 60 + i * 20 + "px";
-        fireContainer.appendChild(flame);
-    }
+    // Flammes principales et secondaires
+    const flameMain = document.createElement("div");
+    flameMain.classList.add("flame");
+    fireContainer.appendChild(flameMain);
+
+    const flameSmall = document.createElement("div");
+    flameSmall.classList.add("flame", "small");
+    fireContainer.appendChild(flameSmall);
+
+    const flameSmall2 = document.createElement("div");
+    flameSmall2.classList.add("flame", "small2");
+    fireContainer.appendChild(flameSmall2);
 
     document.body.appendChild(fireContainer);
 
     // Étincelles continues
-    sparkInterval = setInterval(spawnSpark, 80);
+    sparkInterval = setInterval(() => {
+        if (!fireContainer) return;
+
+        const spark = document.createElement("div");
+        spark.classList.add("spark");
+
+        const x = (Math.random() - 0.5) * 40;
+        spark.style.left = `calc(50% + ${x}px)`;
+        spark.style.bottom = "20px";
+
+        fireContainer.appendChild(spark);
+
+        setTimeout(() => spark.remove(), 1200);
+    }, 80);
 }
 
 function stopFire() {
@@ -315,24 +331,8 @@ function stopFire() {
         fireContainer.remove();
         fireContainer = null;
     }
-
     if (sparkInterval) {
         clearInterval(sparkInterval);
         sparkInterval = null;
     }
-}
-
-function spawnSpark() {
-    if (!fireContainer) return;
-
-    const spark = document.createElement("div");
-    spark.classList.add("spark");
-
-    const x = (Math.random() - 0.5) * 40;
-    spark.style.left = `calc(50% + ${x}px)`;
-    spark.style.bottom = "20px";
-
-    fireContainer.appendChild(spark);
-
-    setTimeout(() => spark.remove(), 1200);
 }

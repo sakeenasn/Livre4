@@ -312,7 +312,7 @@ function startFire() {
     fireBox.appendChild(f3);
     fireBox.appendChild(smoke);
 
-    document.getElementById("bookContainer").appendChild(fireBox);
+    document.body.appendChild(fireBox);
 
     // Étincelles en continu
     sparkLoop = setInterval(spawnSpark, 90);

@@ -268,14 +268,14 @@ function resetBook() {
  }
 
 
-// fogo 
+// fuego
+
 let fireActive = false;
 let fireBox = null;
 let sparkLoop = null;
 
-// Toggle feu via le bouton
 function toggleFire() {
-    if (!isOpen) return; // ne fonctionne que si le livre est ouvert
+    if (!isOpen) return;
 
     if (fireActive) {
         stopFire();
@@ -285,20 +285,11 @@ function toggleFire() {
     fireActive = !fireActive;
 }
 
-// Démarrer le feu
 function startFire() {
-    stopFire(); // au cas où il y aurait déjà un feu actif
+    stopFire();
 
-    // Création du conteneur du feu
     fireBox = document.createElement("div");
     fireBox.classList.add("fire-container");
-
-    // Positionnement au centre du livre
-    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
-    const startX = origin.left + origin.width / 2;
-    const startY = origin.top + origin.height / 2;
-    fireBox.style.left = `${startX}px`;
-    fireBox.style.top = `${startY}px`;
 
     // Flammes principales et secondaires
     const f1 = document.createElement("div");
@@ -314,20 +305,17 @@ function startFire() {
     const smoke = document.createElement("div");
     smoke.classList.add("smoke");
 
-    // Ajouter au conteneur
     fireBox.appendChild(f1);
     fireBox.appendChild(f2);
     fireBox.appendChild(f3);
     fireBox.appendChild(smoke);
 
-    // Ajouter le conteneur au body
     document.body.appendChild(fireBox);
 
-    // Générer des étincelles en continu
+    // Étincelles en continu
     sparkLoop = setInterval(spawnSpark, 90);
 }
 
-// Arrêter le feu
 function stopFire() {
     if (fireBox) {
         fireBox.remove();
@@ -339,20 +327,16 @@ function stopFire() {
     }
 }
 
-// Générer une étincelle
 function spawnSpark() {
     if (!fireBox) return;
 
-    const spark = document.createElement("div");
-    spark.classList.add("spark");
+    const s = document.createElement("div");
+    s.classList.add("spark");
 
-    // Position aléatoire autour du feu
-    spark.style.left = (50 + (Math.random() * 20 - 10)) + "%";
-    spark.style.bottom = "40px";
+    s.style.left = (50 + (Math.random() * 20 - 10)) + "%";
+    s.style.bottom = "40px";
 
-    fireBox.appendChild(spark);
+    fireBox.appendChild(s);
 
-    // Supprimer l’étincelle après l’animation
-    setTimeout(() => spark.remove(), 1200);
+    setTimeout(() => s.remove(), 1200);
 }
-

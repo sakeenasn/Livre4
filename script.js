@@ -270,7 +270,7 @@ function resetBook() {
     document.querySelectorAll('.particle, .fire, .magic-beam').forEach(el => el.remove());   
  }
 
-
+// feu 
 let fireActive = false;
 let fireContainer = null;
 let sparkInterval = null;
@@ -292,6 +292,7 @@ function startFire() {
 
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
+    fireContainer = null;
 
     // Plusieurs flammes pour un effet réaliste
     for (let i = 0; i < 3; i++) {

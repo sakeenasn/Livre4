@@ -355,31 +355,31 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     100% { opacity: 0;   transform: scale(2); }
 }
 
-/* ==== FEU MAGIQUE AMÉLIORÉ ==== */
-
+/* === FEU MAGIQUE === */
 .fire-container {
     position: absolute;
     left: 50%;
-    bottom: 50px; /* ajuste selon où tu veux le feu */
-    transform: translateX(-50%);
-    width: 60px;
-    height: 120px;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    width: 120px;
+    height: 180px;
     pointer-events: none;
     z-index: 9999;
 }
 
-.fire-flame {
+/* FLAMMES PRINCIPALES */
+.flame {
     position: absolute;
     bottom: 0;
     left: 50%;
-    width: 40px;
-    height: 80px;
-    background: radial-gradient(circle, #fff6a8 0%, #ffb347 35%, #ff7a00 70%, #ff3b00 100%);
-    border-radius: 50%;
+    width: 60px;
+    height: 120px;
     transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff6a8 0%, #ffb347 35%, #ff7a00 70%, #ff3b00 100%);
     filter: blur(8px);
-    animation: flameDance 0.8s infinite alternate ease-in-out;
     opacity: 0.9;
+    animation: flameDance 0.8s infinite alternate ease-in-out;
 }
 
 /* FLAMMES SECONDAIRES */
@@ -421,23 +421,4 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 @keyframes sparkFly {
     0%   { transform: translateY(0) scale(1); opacity: 1; }
     100% { transform: translate(40px, -160px) scale(0.2); opacity: 0; }
-}
-
-/* FUMÉE DOUCE */
-.smoke {
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: rgba(120,120,120,0.15);
-    filter: blur(12px);
-    transform: translateX(-50%);
-    animation: smokeLift 3s linear infinite;
-}
-
-@keyframes smokeLift {
-    0% { transform: translate(-50%, 0) scale(1); opacity: 0.3; }
-    100% { transform: translate(-50%, -80px) scale(1.8); opacity: 0; }
 }

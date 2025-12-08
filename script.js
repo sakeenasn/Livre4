@@ -277,8 +277,7 @@ let fireContainer = null;
 let sparkInterval = null;
 
 function toggleFire() {
-    if (!isOpen) return;
-
+    // Ici tu peux remplacer par "if (!isOpen) return;" pour ton livre
     if (!fireActive) {
         startFire();
         fireActive = true;
@@ -289,30 +288,25 @@ function toggleFire() {
 }
 
 function startFire() {
-    stopFire();
+    stopFire(); // sécurité
 
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    // Grande flamme centrale
-    const centerFlame = document.createElement("div");
-    centerFlame.classList.add("fire-flame", "fire-flame-center");
-    fireContainer.appendChild(centerFlame);
-
-    // Flamme gauche
-    const leftFlame = document.createElement("div");
-    leftFlame.classList.add("fire-flame", "fire-flame-side", "fire-flame-left");
-    fireContainer.appendChild(leftFlame);
-
-    // Flamme droite
-    const rightFlame = document.createElement("div");
-    rightFlame.classList.add("fire-flame", "fire-flame-side", "fire-flame-right");
-    fireContainer.appendChild(rightFlame);
+    // Plusieurs flammes pour un effet réaliste
+    for (let i = 0; i < 3; i++) {
+        const flame = document.createElement("div");
+        flame.classList.add("fire-flame");
+        flame.style.animationDelay = `${i * 0.15}s`;
+        flame.style.width = 25 + i * 10 + "px";
+        flame.style.height = 60 + i * 20 + "px";
+        fireContainer.appendChild(flame);
+    }
 
     document.body.appendChild(fireContainer);
 
-    // Étincelles
-    sparkInterval = setInterval(spawnSpark, 400);
+    // Étincelles continues
+    sparkInterval = setInterval(spawnSpark, 80);
 }
 
 function stopFire() {
@@ -332,11 +326,18 @@ function spawnSpark() {
     const spark = document.createElement("div");
     spark.classList.add("spark");
 
-    const x = (Math.random() - 0.5) * 60; // position aléatoire
+    // Position aléatoire autour de la flamme
+    const x = (Math.random() - 0.5) * 40;
     spark.style.left = `calc(50% + ${x}px)`;
     spark.style.bottom = "20px";
 
+    // Taille et durée aléatoire
+    const sparkSize = Math.random() * 4 + 2; // 2px à 6px
+    spark.style.width = spark.style.height = sparkSize + "px";
+    const sparkDuration = Math.random() * 0.5 + 0.8; // 0.8s à 1.3s
+    spark.style.animationDuration = `${sparkDuration}s`;
+
     fireContainer.appendChild(spark);
 
-    setTimeout(() => spark.remove(), 1200);
+    setTimeout(() => spark.remove(), sparkDuration * 1000);
 }

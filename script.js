@@ -294,7 +294,7 @@ function startFire() {
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    // Plusieurs flammes pour un effet réaliste
+    // Flamme principale (feu réaliste)
     for (let i = 0; i < 3; i++) {
         const flame = document.createElement("div");
         flame.classList.add("fire-flame");
@@ -303,6 +303,22 @@ function startFire() {
         flame.style.height = 60 + i * 20 + "px";
         fireContainer.appendChild(flame);
     }
+
+    // 🔥 Flamme secondaire 1 (utilise .flame.small)
+    const small1 = document.createElement("div");
+    small1.classList.add("flame", "small");
+    fireContainer.appendChild(small1);
+
+    // 🔥 Flamme secondaire 2 (utilise .flame.small2)
+    const small2 = document.createElement("div");
+    small2.classList.add("flame", "small2");
+    fireContainer.appendChild(small2);
+
+    document.body.appendChild(fireContainer);
+
+    // Étincelles
+    sparkInterval = setInterval(spawnSpark, 80);
+}
 
     document.body.appendChild(fireContainer);
 

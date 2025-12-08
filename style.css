@@ -355,7 +355,8 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     100% { opacity: 0;   transform: scale(2); }
 }
 
-/* === FEU MAGIQUE === */
+/* ==== FEU MAGIQUE AMÉLIORÉ ==== */
+
 .fire-container {
     position: absolute;
     left: 50%;
@@ -421,4 +422,23 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 @keyframes sparkFly {
     0%   { transform: translateY(0) scale(1); opacity: 1; }
     100% { transform: translate(40px, -160px) scale(0.2); opacity: 0; }
+}
+
+/* FUMÉE DOUCE */
+.smoke {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(120,120,120,0.15);
+    filter: blur(12px);
+    transform: translateX(-50%);
+    animation: smokeLift 3s linear infinite;
+}
+
+@keyframes smokeLift {
+    0% { transform: translate(-50%, 0) scale(1); opacity: 0.3; }
+    100% { transform: translate(-50%, -80px) scale(1.8); opacity: 0; }
 }

@@ -275,8 +275,9 @@ let fireActive = false;
 let fireContainer = null;
 let sparkInterval = null;
 
+// --- TOGGLE DU FEU ---
 function toggleFire() {
-    if (!isOpen) return; // feu seulement livre ouvert
+    if (!isOpen) return; // feu seulement si le livre est ouvert
 
     if (!fireActive) {
         startFire();
@@ -287,41 +288,43 @@ function toggleFire() {
     }
 }
 
+// --- START DU FEU ---
 function startFire() {
-    stopFire(); // Sécurité
+    stopFire(); // sécurité : stop feu précédent
 
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    // === FLAMMES PRINCIPALES (plus nombreuses) ===
+    // --- FLAMMES PRINCIPALES ---
+    const flames = [];
     for (let i = 0; i < 6; i++) {
         const flame = document.createElement("div");
         flame.classList.add("fire-flame");
-
-        // variations naturelles
-        flame.style.animationDelay = `${i * 0.12}s`;
-        flame.style.width = 25 + i * 6 + "px";
-        flame.style.height = 60 + i * 12 + "px";
-        flame.style.left = 50 + (Math.random() * 10 - 5) + "%"; // petit décalage réaliste
-
         fireContainer.appendChild(flame);
+        flames.push(flame);
+
+        // Démarre le mouvement aléatoire
+        randomizeFlame(flame);
     }
 
-    // === PETITES FLAMMES ===
+    // --- PETITES FLAMMES ---
     const small1 = document.createElement("div");
     small1.classList.add("flame", "small");
     fireContainer.appendChild(small1);
+    randomizeFlame(small1);
 
     const small2 = document.createElement("div");
     small2.classList.add("flame", "small2");
     fireContainer.appendChild(small2);
+    randomizeFlame(small2);
 
     document.body.appendChild(fireContainer);
 
-    // === Étincelles (moins fréquentes) ===
-    sparkInterval = setInterval(spawnSpark, 230); 
+    // Étincelles moins fréquentes
+    sparkInterval = setInterval(spawnSpark, 250);
 }
 
+// --- STOP DU FEU ---
 function stopFire() {
     if (fireContainer) {
         fireContainer.remove();
@@ -334,13 +337,13 @@ function stopFire() {
     }
 }
 
+// --- SPAWN ÉTINCELLES ---
 function spawnSpark() {
     if (!fireContainer) return;
 
     const spark = document.createElement("div");
     spark.classList.add("spark");
 
-    // Position autour du centre du feu
     const x = (Math.random() - 0.5) * 40;
     spark.style.left = `calc(50% + ${x}px)`;
     spark.style.bottom = "20px";
@@ -348,4 +351,24 @@ function spawnSpark() {
     fireContainer.appendChild(spark);
 
     setTimeout(() => spark.remove(), 1200);
+}
+
+// --- MOUVEMENT ALÉATOIRE DES FLAMMES ---
+function randomizeFlame(flame) {
+    function applyRandom() {
+        // Variation gauche/droite
+        const offsetX = (Math.random() - 0.5) * 20;
+
+        // Variation hauteur / scale
+        const scaleY = 1 + Math.random() * 0.5;
+        const scaleX = 1 + Math.random() * 0.2;
+
+        flame.style.transform = `translateX(${offsetX}px) scale(${scaleX}, ${scaleY})`;
+
+        // Nouvelle variation aléatoire toutes les 150 à 400 ms
+        const next = 150 + Math.random() * 250;
+        setTimeout(applyRandom, next);
+    }
+
+    applyRandom();
 }

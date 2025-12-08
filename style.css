@@ -382,8 +382,8 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 
 /* Grande flamme centrale */
 .fire-flame-center {
-    width: 25px;
-    height: 100px;
+    width: 120px;
+    height: 180px;
     left: 50%;
     opacity: 0.9;
     transform: translateX(-50%);

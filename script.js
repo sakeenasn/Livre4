@@ -271,13 +271,13 @@ function resetBook() {
 
 
 //feu
+
 let fireActive = false;
 let fireContainer = null;
 let sparkInterval = null;
 
-// --- TOGGLE DU FEU ---
 function toggleFire() {
-    if (!isOpen) return; // feu seulement si le livre est ouvert
+    if (!isOpen) return; // feu seulement si livre ouvert
 
     if (!fireActive) {
         startFire();
@@ -288,43 +288,27 @@ function toggleFire() {
     }
 }
 
-// --- START DU FEU ---
 function startFire() {
-    stopFire(); // sécurité : stop feu précédent
+    stopFire(); // sécurité
 
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    // --- FLAMMES PRINCIPALES ---
-    const flames = [];
-    for (let i = 0; i < 6; i++) {
+    const flameCount = 5; // nombre de flammes
+    for (let i = 0; i < flameCount; i++) {
         const flame = document.createElement("div");
         flame.classList.add("fire-flame");
+        flame.style.left = `${45 + i * 10}%`; // décalage horizontal
+        flame.style.animationDelay = `${i * 0.2}s`; // décalage animation
         fireContainer.appendChild(flame);
-        flames.push(flame);
-
-        // Démarre le mouvement aléatoire
-        randomizeFlame(flame);
     }
-
-    // --- PETITES FLAMMES ---
-    const small1 = document.createElement("div");
-    small1.classList.add("flame", "small");
-    fireContainer.appendChild(small1);
-    randomizeFlame(small1);
-
-    const small2 = document.createElement("div");
-    small2.classList.add("flame", "small2");
-    fireContainer.appendChild(small2);
-    randomizeFlame(small2);
 
     document.body.appendChild(fireContainer);
 
-    // Étincelles moins fréquentes
+    // Étincelles moins fréquentes pour plus de réalisme
     sparkInterval = setInterval(spawnSpark, 250);
 }
 
-// --- STOP DU FEU ---
 function stopFire() {
     if (fireContainer) {
         fireContainer.remove();
@@ -337,38 +321,17 @@ function stopFire() {
     }
 }
 
-// --- SPAWN ÉTINCELLES ---
 function spawnSpark() {
     if (!fireContainer) return;
 
     const spark = document.createElement("div");
     spark.classList.add("spark");
 
-    const x = (Math.random() - 0.5) * 40;
+    const x = (Math.random() - 0.5) * 60; // position aléatoire
     spark.style.left = `calc(50% + ${x}px)`;
     spark.style.bottom = "20px";
 
     fireContainer.appendChild(spark);
 
     setTimeout(() => spark.remove(), 1200);
-}
-
-// --- MOUVEMENT ALÉATOIRE DES FLAMMES ---
-function randomizeFlame(flame) {
-    function applyRandom() {
-        // Variation gauche/droite
-        const offsetX = (Math.random() - 0.5) * 20;
-
-        // Variation hauteur / scale
-        const scaleY = 1 + Math.random() * 0.5;
-        const scaleX = 1 + Math.random() * 0.2;
-
-        flame.style.transform = `translateX(${offsetX}px) scale(${scaleX}, ${scaleY})`;
-
-        // Nouvelle variation aléatoire toutes les 150 à 400 ms
-        const next = 150 + Math.random() * 250;
-        setTimeout(applyRandom, next);
-    }
-
-    applyRandom();
 }

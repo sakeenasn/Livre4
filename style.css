@@ -357,75 +357,53 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 
 /* --- FEU MAGIQUE --- */
 
+/* --- CONTAINER --- */
+  .fire-container {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -20%);
+      width: 120px;
+      height: 160px;
+      pointer-events: none;
+      z-index: 9999;
+  }
 
-/* Conteneur du feu */
-.fire-container {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -20%);
-    width: 140px;
-    height: 180px;
-    pointer-events: none;
-    z-index: 9999;
-}
+  /* --- FLAMMES --- */
+  .fire-flame {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 30px;
+      height: 60px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, #ffdd55, #ff8800, #ff3300);
+      filter: blur(3px);
+      opacity: 0.85;
+      animation: flameMove 0.6s infinite ease-in-out alternate;
+      box-shadow: 0 0 20px 5px rgba(255, 136, 0, 0.6);
+  }
 
-/* Flammes principales */
-.fire-flame {
-    position: absolute;
-    bottom: 0;
-    background: radial-gradient(circle at 50% 80%, #ffe37e, #ff9900 40%, #ff3300 75%, transparent 100%);
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    filter: blur(3px) brightness(1.5);
-    animation: flameWave 1s infinite ease-in-out alternate;
-}
+  @keyframes flameMove {
+      0%   { transform: translateX(-50%) scale(1,1.1) rotate(0deg); opacity: 0.8; }
+      50%  { transform: translateX(-48%) scale(1.2,1.4) rotate(2deg); opacity: 1; }
+      100% { transform: translateX(-50%) scale(0.9,1.2) rotate(-2deg); opacity: 0.8; }
+  }
 
-/* Grande flamme centrale */
-.fire-flame-center {
-    width: 120px;
-    height: 180px;
-    left: 0%;
-    opacity: 0.9;
-    transform: translateX(-50%);
-    animation-duration: 1s;
-}
+  /* --- ÉTINCELLES --- */
+  .spark {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ffd700;
+      border-radius: 50%;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: sparkFloat linear forwards;
+  }
 
-/* Petites flammes latérales */
-.fire-flame-side {
-    width: 15px;
-    height: 60px;
-    opacity: 0.7;
-}
-
-/* Flamme gauche */
-.fire-flame-left { left: 35%; animation-duration: 1.2s; }
-
-/* Flamme droite */
-.fire-flame-right { left: 65%; animation-duration: 1.1s; }
-
-/* Mouvement ondulant réaliste */
-@keyframes flameWave {
-    0%   { transform: translateX(0) translateY(0) scale(1,1); }
-    25%  { transform: translateX(-2px) translateY(-5px) scale(1.05,1.1); }
-    50%  { transform: translateX(2px) translateY(-10px) scale(1.1,1.15); }
-    75%  { transform: translateX(-1px) translateY(-15px) scale(1.05,1.2); }
-    100% { transform: translateX(1px) translateY(-20px) scale(1,1.25); }
-}
-
-/* Étincelles */
-.spark {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: #ffd700;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800;
-    opacity: 1;
-    animation: sparkFly 1.2s linear forwards;
-    pointer-events: none;
-}
-
-@keyframes sparkFly {
-    0%   { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translate(40px, -160px) scale(0.2); opacity: 0; }
-}
+  @keyframes sparkFloat {
+      0%   { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { transform: translate(30px,-120px) scale(0.1); opacity: 0; }
+  }

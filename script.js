@@ -320,12 +320,7 @@ function startFire() {
     sparkInterval = setInterval(spawnSpark, 80);
 }
 
-    document.body.appendChild(fireContainer);
-
-    // Étincelles continues
-    sparkInterval = setInterval(spawnSpark, 80);
-}
-
+    
 function stopFire() {
     if (fireContainer) {
         fireContainer.remove();

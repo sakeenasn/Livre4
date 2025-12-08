@@ -277,7 +277,7 @@ let fireContainer = null;
 let sparkInterval = null;
 
 function toggleFire() {
-    if (!isOpen) return; // feu seulement si livre ouvert
+    if (!isOpen) return;
 
     if (!fireActive) {
         startFire();
@@ -289,24 +289,40 @@ function toggleFire() {
 }
 
 function startFire() {
-    stopFire(); // sécurité
+    stopFire();
 
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    const flameCount = 5; // nombre de flammes
-    for (let i = 0; i < flameCount; i++) {
+    const mainFlameCount = 5;
+    const smallFlameCount = 5; // flammes secondaires
+
+    // Flammes principales
+    for (let i = 0; i < mainFlameCount; i++) {
         const flame = document.createElement("div");
         flame.classList.add("fire-flame");
-        flame.style.left = `${45 + i * 10}%`; // décalage horizontal
-        flame.style.animationDelay = `${i * 0.2}s`; // décalage animation
+        flame.style.left = `${40 + i * 12}%`;
+        flame.style.height = `${50 + Math.random() * 40}px`;
+        flame.style.animationDuration = `${0.8 + Math.random() * 0.6}s`;
+        flame.style.opacity = `${0.6 + Math.random() * 0.3}`;
+        fireContainer.appendChild(flame);
+    }
+
+    // Flammes secondaires
+    for (let i = 0; i < smallFlameCount; i++) {
+        const flame = document.createElement("div");
+        flame.classList.add("fire-flame-small");
+        flame.style.left = `${35 + Math.random() * 40}%`; // position aléatoire
+        flame.style.height = `${20 + Math.random() * 30}px`;
+        flame.style.animationDuration = `${0.6 + Math.random() * 0.8}s`;
+        flame.style.opacity = `${0.3 + Math.random() * 0.4}`;
         fireContainer.appendChild(flame);
     }
 
     document.body.appendChild(fireContainer);
 
-    // Étincelles moins fréquentes pour plus de réalisme
-    sparkInterval = setInterval(spawnSpark, 250);
+    // Étincelles
+    sparkInterval = setInterval(spawnSpark, 300);
 }
 
 function stopFire() {
@@ -314,7 +330,6 @@ function stopFire() {
         fireContainer.remove();
         fireContainer = null;
     }
-
     if (sparkInterval) {
         clearInterval(sparkInterval);
         sparkInterval = null;

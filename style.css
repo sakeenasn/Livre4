@@ -360,27 +360,26 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 .fire-container {
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -40%);
-    width: 120px;
-    height: 180px;
+    bottom: 50px; /* ajuste selon où tu veux le feu */
+    transform: translateX(-50%);
+    width: 60px;
+    height: 120px;
     pointer-events: none;
     z-index: 9999;
 }
 
-/* FLAMMES PRINCIPALES */
-.flame {
+.fire-flame {
     position: absolute;
     bottom: 0;
     left: 50%;
-    width: 60px;
-    height: 120px;
-    transform: translateX(-50%);
-    border-radius: 50%;
+    width: 40px;
+    height: 80px;
     background: radial-gradient(circle, #fff6a8 0%, #ffb347 35%, #ff7a00 70%, #ff3b00 100%);
+    border-radius: 50%;
+    transform: translateX(-50%);
     filter: blur(8px);
-    opacity: 0.9;
     animation: flameDance 0.8s infinite alternate ease-in-out;
+    opacity: 0.9;
 }
 
 /* FLAMMES SECONDAIRES */

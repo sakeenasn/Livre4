@@ -243,9 +243,6 @@ function stopLumiere() {
 
 
 
-
-
-
 function resetBook() {
     // Fecha o livro
     isOpen = false;
@@ -271,6 +268,8 @@ function resetBook() {
  }
 
 
+
+
 //feu
 let fireActive = false;
 let fireContainer = null;
@@ -289,26 +288,26 @@ function toggleFire() {
 }
 
 function startFire() {
-    stopFire(); // sécurité si déjà allumé
+    stopFire(); // Sécurité
 
-    // Container global du feu
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    // === FLAMMES PRINCIPALES (réalistes) ===
-    for (let i = 0; i < 3; i++) {
+    // === FLAMMES PRINCIPALES (plus nombreuses) ===
+    for (let i = 0; i < 6; i++) {
         const flame = document.createElement("div");
         flame.classList.add("fire-flame");
 
-        // tailles/variation
-        flame.style.animationDelay = `${i * 0.15}s`;
-        flame.style.width = 25 + i * 10 + "px";
-        flame.style.height = 60 + i * 20 + "px";
+        // variations naturelles
+        flame.style.animationDelay = `${i * 0.12}s`;
+        flame.style.width = 25 + i * 6 + "px";
+        flame.style.height = 60 + i * 12 + "px";
+        flame.style.left = 50 + (Math.random() * 10 - 5) + "%"; // petit décalage réaliste
 
         fireContainer.appendChild(flame);
     }
 
-    // === FLAMMES SECONDAIRES (style cartoon + mouvements) ===
+    // === PETITES FLAMMES ===
     const small1 = document.createElement("div");
     small1.classList.add("flame", "small");
     fireContainer.appendChild(small1);
@@ -317,11 +316,10 @@ function startFire() {
     small2.classList.add("flame", "small2");
     fireContainer.appendChild(small2);
 
-    // Ajout du feu dans la page
     document.body.appendChild(fireContainer);
 
-    // Étincelles en continu
-    sparkInterval = setInterval(spawnSpark, 80);
+    // === Étincelles (moins fréquentes) ===
+    sparkInterval = setInterval(spawnSpark, 230); 
 }
 
 function stopFire() {
@@ -342,13 +340,12 @@ function spawnSpark() {
     const spark = document.createElement("div");
     spark.classList.add("spark");
 
-    // Position aléatoire autour du centre du feu
+    // Position autour du centre du feu
     const x = (Math.random() - 0.5) * 40;
     spark.style.left = `calc(50% + ${x}px)`;
     spark.style.bottom = "20px";
 
     fireContainer.appendChild(spark);
 
-    // disparaît après animation
     setTimeout(() => spark.remove(), 1200);
 }

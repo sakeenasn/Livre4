@@ -357,6 +357,7 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 
 /* --- FEU MAGIQUE --- */
 
+
 /* Conteneur du feu */
 .fire-container {
     position: absolute;

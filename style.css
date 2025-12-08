@@ -237,173 +237,113 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 }
 
 
-/* --- FEU --- */
-.flame-box{
-    height: 60px;
-    width: 60px;
+/* ===== FEU  css ===== */
+.fire-container {
     position: absolute;
-    transform-origin: center bottom;
-   animation: flicker 180ms ease-in-out infinite alternate;
-}
-
-.flame{
-    bottom: 0;
-    position: absolute;
-    border-top-left-radius: 50%;
-    border-bottom-left-radius: 50%;
-    border-bottom-right-radius: 50%;
-    transform: rotate(-45deg) scale(1.5, 1.5);
-}
-
-.circle{
-    border-radius: 50%;
-    position: absolute;
-}
-
-/* CORES */
-.yellow{
-    height: 30px;
-    width: 30px;
-    left: 15px;
-    background: #ffd700;
-    box-shadow: 0px 0px 9px 4px #ffd700;
-}
-
-.orange{
-    left: 10px;
-    width: 40px;
-    height: 40px;
-    background: #ffa500;
-    box-shadow: 0px 0px 9px 4px #ffa500;
-}
-
-.red{
-    height: 50px;
-    width: 50px;
-    left: 5px;
-    background: #ff4500;
-    box-shadow: 0px 0px 5px 4px #ff4500;
-}
-
-.white{
-    height: 30px;
-    width: 30px;
-    left: 15px;
-    bottom: -4px;
-    background: #ffffff;
-    box-shadow: 0px 0px 9px 4px #ffffff;
-}
-
-.blue{
-    left: 25px;
-    bottom: -25px;
-    width: 10px;
-    height: 10px;
-    background: #6a5acd;
-    box-shadow: 0px 0px 15px 10px #6a5acd;
-}
-
-.black{
-    left: 10px;
-    bottom: -60px;
-    width: 40px;
-    height: 40px;
-    background: #000000;
-    box-shadow: 0px 0px 15px 10px #000000;
-}
-
-@keyframes flicker{
-    0% {transform: rotate(-1deg);}
-    20%{transform: rotate(1deg);}
-    40%{transform: rotate(-1deg);}
-    60%{transform: rotate(1deg) scaleY(1.04);}
-    80%{transform: rotate(-2deg) scaleY(0.92);}
-    100% {transform: rotate(1deg);}
-}
-
-
-
-/* --- SECOUER--- */
-@keyframes shakeOpen {
-  0% { transform: translate(0,0) rotate(0deg); }
-  25% { transform: translate(5px,-5px) rotate(-5deg); }
-  50% { transform: translate(-5px,5px) rotate(5deg); }
-  75% { transform: translate(5px,-5px) rotate(-5deg); }
-  100% { transform: translate(0,0) rotate(0deg); }
-}
-.shake { animation: shakeOpen 0.5s; }
-
-
-
-/* --- LUMIERE --- */
-.magic-beam {
-    position: absolute;         /* position absolue par rapport au body */
-    width: 0;
-    height: 0;
-    border-left: 100px solid transparent;   /* moitié largeur gauche */
-    border-right: 100px solid transparent;  /* moitié largeur droite */
-    border-top: 200px solid rgba(255,255,220,0.9); /* couleur lumière */
-    filter: blur(22px) brightness(2.5);
-    transform-origin: center bottom;
-    animation: beamExpand 2.5s ease-out forwards;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 350px;
+    pointer-events: none;
     z-index: 9999;
 }
 
-@keyframes beamExpand {
-    0%   { opacity: 0.9; transform: scale(0.2); }
-    60%  { opacity: 1;   transform: scale(1.3); }
-    100% { opacity: 0;   transform: scale(2); }
+/* FLAMMES INDIVIDUELLES */
+.flame {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 120px;
+    height: 220px;
+    transform: translateX(-50%);
+    border-radius: 50% 50% 20% 20%;
+    background: radial-gradient(circle at 50% 20%,
+        #fff9c4 0%,
+        #ffd54f 40%,
+        #ff6f00 70%,
+        #d84315 90%
+    );
+    filter: blur(12px);
+    animation: flameFlicker 0.7s infinite alternate ease-in-out;
+    opacity: 0.95;
 }
 
-/* --- FEU MAGIQUE --- */
+.flame.small {
+    width: 90px;
+    height: 170px;
+    left: 30%;
+    animation: flameFlicker 0.6s infinite alternate ease-in-out;
+}
 
-/* --- CONTAINER --- */
-  .fire-container {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -20%);
-      width: 120px;
-      height: 160px;
-      pointer-events: none;
-      z-index: 9999;
-  }
+.flame.small2 {
+    width: 100px;
+    height: 190px;
+    left: 70%;
+    animation: flameFlicker 0.8s infinite alternate ease-in-out;
+}
 
-  /* --- FLAMMES --- */
-  .fire-flame {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 30px;
-      height: 60px;
-      border-radius: 50%;
-      transform: translateX(-50%);
-      background: radial-gradient(circle, #ffdd55, #ff8800, #ff3300);
-      filter: blur(3px);
-      opacity: 0.85;
-      animation: flameMove 0.6s infinite ease-in-out alternate;
-      box-shadow: 0 0 20px 5px rgba(255, 136, 0, 0.6);
-  }
+/* ANIMATION FLAMMES */
+@keyframes flameFlicker {
+    0%   { transform: translateX(-50%) scale(1,1); opacity: 0.8; }
+    50%  { transform: translateX(-48%) scale(1.2,1.1); opacity: 0.9; }
+    100% { transform: translateX(-52%) scale(1.4,1.3) translateY(-20px); opacity: 1; }
+}
 
-  @keyframes flameMove {
-      0%   { transform: translateX(-50%) scale(1,1.1) rotate(0deg); opacity: 0.8; }
-      50%  { transform: translateX(-48%) scale(1.2,1.4) rotate(2deg); opacity: 1; }
-      100% { transform: translateX(-50%) scale(0.9,1.2) rotate(-2deg); opacity: 0.8; }
-  }
+/* FUMÉE */
+.smoke {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(150,150,150,0.15);
+    filter: blur(20px);
+    transform: translateX(-50%);
+    animation: smokeRise 3s linear infinite;
+}
 
-  /* --- ÉTINCELLES --- */
-  .spark {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #ffd700;
-      border-radius: 50%;
-      opacity: 0.8;
-      pointer-events: none;
-      animation: sparkFloat linear forwards;
-  }
+@keyframes smokeRise {
+    0%   { transform: translate(-50%,0) scale(1); opacity: 0.3; }
+    50%  { transform: translate(-50%,-50px) scale(1.5); opacity: 0.2; }
+    100% { transform: translate(-50%,-120px) scale(2.2); opacity: 0; }
+}
 
-  @keyframes sparkFloat {
-      0%   { transform: translate(0,0) scale(1); opacity: 1; }
-      100% { transform: translate(30px,-120px) scale(0.1); opacity: 0; }
-  }
+/* ÉTINCELLES */
+.spark {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ffe066;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ffd700;
+    animation: sparkRise 1.2s linear forwards;
+}
+
+@keyframes sparkRise {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    50%  { transform: translate(20px,-80px) scale(0.6); opacity: 0.8; }
+    100% { transform: translate(50px,-200px) scale(0.2); opacity: 0; }
+}
+
+/* LUMIÈRE DYNAMIQUE */
+.fire-light {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,180,50,0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 998;
+    animation: lightFlicker 0.6s infinite alternate;
+}
+
+@keyframes lightFlicker {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.45; }
+}

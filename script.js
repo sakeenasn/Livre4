@@ -264,7 +264,7 @@ function resetBook() {
     
 
     // Remove TODAS as partículas do ecrã
-    document.querySelectorAll('.particle, .fire, .magic.beam').forEach(el => el.remove());   
+    document.querySelectorAll('.particle, .fire, .magic-beam').forEach(el => el.remove());   
  }
 
 

@@ -289,38 +289,41 @@ function toggleFire() {
 }
 
 function startFire() {
-    stopFire(); // sécurité
+    stopFire(); // sécurité si déjà allumé
 
+    // Container global du feu
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    // Flamme principale (feu réaliste)
+    // === FLAMMES PRINCIPALES (réalistes) ===
     for (let i = 0; i < 3; i++) {
         const flame = document.createElement("div");
         flame.classList.add("fire-flame");
+
+        // tailles/variation
         flame.style.animationDelay = `${i * 0.15}s`;
         flame.style.width = 25 + i * 10 + "px";
         flame.style.height = 60 + i * 20 + "px";
+
         fireContainer.appendChild(flame);
     }
 
-    // 🔥 Flamme secondaire 1 (utilise .flame.small)
+    // === FLAMMES SECONDAIRES (style cartoon + mouvements) ===
     const small1 = document.createElement("div");
     small1.classList.add("flame", "small");
     fireContainer.appendChild(small1);
 
-    // 🔥 Flamme secondaire 2 (utilise .flame.small2)
     const small2 = document.createElement("div");
     small2.classList.add("flame", "small2");
     fireContainer.appendChild(small2);
 
+    // Ajout du feu dans la page
     document.body.appendChild(fireContainer);
 
-    // Étincelles
+    // Étincelles en continu
     sparkInterval = setInterval(spawnSpark, 80);
 }
 
-    
 function stopFire() {
     if (fireContainer) {
         fireContainer.remove();
@@ -339,11 +342,13 @@ function spawnSpark() {
     const spark = document.createElement("div");
     spark.classList.add("spark");
 
+    // Position aléatoire autour du centre du feu
     const x = (Math.random() - 0.5) * 40;
     spark.style.left = `calc(50% + ${x}px)`;
     spark.style.bottom = "20px";
 
     fireContainer.appendChild(spark);
 
+    // disparaît après animation
     setTimeout(() => spark.remove(), 1200);
 }

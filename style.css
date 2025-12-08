@@ -241,8 +241,8 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 .fire-container {
     position: absolute;
     left: 50%;
-    top: 60%;
-    transform: translate(-50%, -50%);
+    top: 50%;
+    transform: translate(-50%, -55%);
     width: 250px;
     height: 350px;
     pointer-events: none;

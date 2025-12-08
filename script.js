@@ -294,35 +294,25 @@ function startFire() {
     fireContainer = document.createElement("div");
     fireContainer.classList.add("fire-container");
 
-    const mainFlameCount = 5;
-    const smallFlameCount = 5; // flammes secondaires
+    // Grande flamme centrale
+    const centerFlame = document.createElement("div");
+    centerFlame.classList.add("fire-flame", "fire-flame-center");
+    fireContainer.appendChild(centerFlame);
 
-    // Flammes principales
-    for (let i = 0; i < mainFlameCount; i++) {
-        const flame = document.createElement("div");
-        flame.classList.add("fire-flame");
-        flame.style.left = `${40 + i * 12}%`;
-        flame.style.height = `${50 + Math.random() * 40}px`;
-        flame.style.animationDuration = `${0.8 + Math.random() * 0.6}s`;
-        flame.style.opacity = `${0.6 + Math.random() * 0.3}`;
-        fireContainer.appendChild(flame);
-    }
+    // Flamme gauche
+    const leftFlame = document.createElement("div");
+    leftFlame.classList.add("fire-flame", "fire-flame-side", "fire-flame-left");
+    fireContainer.appendChild(leftFlame);
 
-    // Flammes secondaires
-    for (let i = 0; i < smallFlameCount; i++) {
-        const flame = document.createElement("div");
-        flame.classList.add("fire-flame-small");
-        flame.style.left = `${35 + Math.random() * 40}%`; // position aléatoire
-        flame.style.height = `${20 + Math.random() * 30}px`;
-        flame.style.animationDuration = `${0.6 + Math.random() * 0.8}s`;
-        flame.style.opacity = `${0.3 + Math.random() * 0.4}`;
-        fireContainer.appendChild(flame);
-    }
+    // Flamme droite
+    const rightFlame = document.createElement("div");
+    rightFlame.classList.add("fire-flame", "fire-flame-side", "fire-flame-right");
+    fireContainer.appendChild(rightFlame);
 
     document.body.appendChild(fireContainer);
 
     // Étincelles
-    sparkInterval = setInterval(spawnSpark, 300);
+    sparkInterval = setInterval(spawnSpark, 400);
 }
 
 function stopFire() {
